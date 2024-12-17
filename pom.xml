@@ -36,6 +36,53 @@
             <version>${junit.version}</version>
             <scope>test</scope>
         </dependency>
+
+        <dependency>
+            <groupId>jakarta.el</groupId>
+            <artifactId>jakarta.el-api</artifactId>
+            <version>5.0.0</version> <!-- 或者使用合适的版本 -->
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.glassfish.web</groupId>
+            <artifactId>jakarta.servlet.jsp.jstl</artifactId>
+            <version>2.0.0</version> <!-- 适用于 Jakarta EE -->
+        </dependency>
+
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <version>8.0.33</version>  <!-- 请检查最新版本 -->
+        </dependency>
+
+        <dependency>
+            <groupId>net.sf.json-lib</groupId>
+            <artifactId>json-lib</artifactId>
+            <version>2.4</version>
+            <classifier>jdk15</classifier>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/src/main/webapp/WEB-INF/lib/json-lib-2.2.2-jdk15.jar</systemPath>
+        </dependency>
+
+
+        <dependency>
+            <groupId>commons-fileupload</groupId>
+            <artifactId>commons-fileupload</artifactId>
+            <version>1.5</version> <!-- 最新稳定版 -->
+            <scope>system</scope>
+            <systemPath>${project.basedir}/src/main/webapp/WEB-INF/lib/commons-fileupload-1.2.1.jar</systemPath>
+        </dependency>
+
+        <dependency>
+            <groupId>jxl</groupId> <!-- 根据你的需要定义 groupId -->
+            <artifactId>jxl</artifactId>  <!-- 根据你的需要定义 artifactId -->
+            <version>2.6.12</version>  <!-- 根据 JAR 文件的版本 -->
+            <scope>system</scope>
+            <systemPath>${project.basedir}/src/main/webapp/WEB-INF/lib/jxl.jar</systemPath>
+        </dependency>
+
+
+
     </dependencies>
 
     <build>
