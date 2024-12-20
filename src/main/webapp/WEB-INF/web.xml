@@ -3,4 +3,154 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="https://jakarta.ee/xml/ns/jakartaee https://jakarta.ee/xml/ns/jakartaee/web-app_6_0.xsd"
          version="6.0">
+    <display-name>shop</display-name>
+
+    <servlet>
+        <description>This is the description of my J2EE component</description>
+        <display-name>This is the display name of my J2EE component</display-name>
+        <servlet-name>AddSvlt</servlet-name>
+        <servlet-class>com.shops.servlet.AddSvlt</servlet-class>
+    </servlet>
+    <servlet>
+        <description>This is the description of my J2EE component</description>
+        <display-name>This is the display name of my J2EE component</display-name>
+        <servlet-name>UpdSvlt</servlet-name>
+        <servlet-class>com.shops.servlet.UpdSvlt</servlet-class>
+    </servlet>
+    <servlet>
+        <description>This is the description of my J2EE component</description>
+        <display-name>This is the display name of my J2EE component</display-name>
+        <servlet-name>DelSvlt</servlet-name>
+        <servlet-class>com.shops.servlet.DelSvlt</servlet-class>
+    </servlet>
+    <servlet>
+        <description>This is the description of my J2EE component</description>
+        <display-name>This is the display name of my J2EE component</display-name>
+        <servlet-name>CkSvlt</servlet-name>
+        <servlet-class>com.shops.servlet.CkSvlt</servlet-class>
+    </servlet>
+    <servlet>
+        <description>This is the description of my J2EE component</description>
+        <display-name>This is the display name of my J2EE component</display-name>
+        <servlet-name>PagingSvlt</servlet-name>
+        <servlet-class>com.shops.servlet.PagingSvlt</servlet-class>
+    </servlet>
+    <servlet>
+        <description>This is the description of my J2EE component</description>
+        <display-name>This is the display name of my J2EE component</display-name>
+        <servlet-name>GetDataSvlt</servlet-name>
+        <servlet-class>com.shops.servlet.GetDataSvlt</servlet-class>
+    </servlet>
+    <servlet>
+        <description>This is the description of my J2EE component</description>
+        <display-name>This is the display name of my J2EE component</display-name>
+        <servlet-name>LoginSvlt</servlet-name>
+        <servlet-class>com.shops.servlet.LoginSvlt</servlet-class>
+    </servlet>
+    <servlet>
+        <description>This is the description of my J2EE component</description>
+        <display-name>This is the display name of my J2EE component</display-name>
+        <servlet-name>LogoutSvlt</servlet-name>
+        <servlet-class>com.shops.servlet.LogoutSvlt</servlet-class>
+    </servlet>
+    <servlet>
+        <description>This is the description of my J2EE component</description>
+        <display-name>This is the display name of my J2EE component</display-name>
+        <servlet-name>InitSvlt</servlet-name>
+        <servlet-class>com.shops.servlet.InitSvlt</servlet-class>
+    </servlet>
+    <servlet>
+        <description>This is the description of my J2EE component</description>
+        <display-name>This is the display name of my J2EE component</display-name>
+        <servlet-name>AddTb_goodsSvlt</servlet-name>
+        <servlet-class>com.shops.servlet.AddTb_goodsSvlt</servlet-class>
+    </servlet>
+    <servlet>
+        <description>This is the description of my J2EE component</description>
+        <display-name>This is the display name of my J2EE component</display-name>
+        <servlet-name>UpdTb_goodsSvlt</servlet-name>
+        <servlet-class>com.shops.servlet.UpdTb_goodsSvlt</servlet-class>
+    </servlet>
+    <servlet>
+        <description>This is the description of my J2EE component</description>
+        <display-name>This is the display name of my J2EE component</display-name>
+        <servlet-name>SySvlt</servlet-name>
+        <servlet-class>com.shops.servlet.SySvlt</servlet-class>
+    </servlet>
+
+
+
+    <filter>
+        <filter-name>BasePathFilter</filter-name>
+        <filter-class>com.shops.servlet.filter.BasePathFilter</filter-class>
+    </filter>
+
+
+
+
+    <servlet-mapping>
+        <servlet-name>AddSvlt</servlet-name>
+        <url-pattern>/AddSvlt</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>UpdSvlt</servlet-name>
+        <url-pattern>/UpdSvlt</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>DelSvlt</servlet-name>
+        <url-pattern>/DelSvlt</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>CkSvlt</servlet-name>
+        <url-pattern>/CkSvlt</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>PagingSvlt</servlet-name>
+        <url-pattern>/PagingSvlt</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>GetDataSvlt</servlet-name>
+        <url-pattern>/GetDataSvlt</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>LoginSvlt</servlet-name>
+        <url-pattern>/LoginSvlt</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>LogoutSvlt</servlet-name>
+        <url-pattern>/LogoutSvlt</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>InitSvlt</servlet-name>
+        <url-pattern>/InitSvlt</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>AddTb_goodsSvlt</servlet-name>
+        <url-pattern>/AddTb_goodsSvlt</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>UpdTb_goodsSvlt</servlet-name>
+        <url-pattern>/UpdTb_goodsSvlt</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>SySvlt</servlet-name>
+        <url-pattern>/SySvlt</url-pattern>
+    </servlet-mapping>
+
+
+
+    <filter-mapping>
+        <filter-name>BasePathFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+
+
+
+
+
+    <welcome-file-list>
+        <welcome-file>index.jsp</welcome-file>
+    </welcome-file-list>
+
+
 </web-app>

@@ -19,6 +19,6 @@
       <span>|</span>
       <a href="javascript:;">关于货源</a>
     </p>
-    <p class="coty">网上商城版权所有 &copy; 2024 - go  to  <a href="${bpath}views/index.jsp" title="网站后台">网站后台</a></p>
+    <p class="coty">网上商城版权所有 &copy; 2024 - go  to  <a href="${sessionScope.bpath}views/index.jsp" title="网站后台">网站后台</a></p>
   </div>
 </div>
