@@ -27,7 +27,7 @@
           <div class="layui-inline iphone">
             <div class="layui-input-inline">
               <i class="layui-icon layui-icon-cellphone iphone-icon"></i>
-              <input type="tel" name="uphone" id="uphone" lay-verify="required|phone" placeholder="请输入手机号" autocomplete="off" class="layui-input">
+              <input type="text" name="uphone" id="uphone" lay-verify="required|phone" placeholder="请输入手机号" autocomplete="off" class="layui-input">
             </div>
           </div>
           <div class="layui-inline iphone">
