@@ -1,0 +1,132 @@
+/* 重置一些默认样式 */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* 页面背景和字体 */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    padding: 20px;
+}
+
+/* 页眉样式 */
+.header {
+    background-color: #333;
+    color: white;
+    padding: 20px;
+    text-align: center;
+    border-radius: 8px;
+    margin-bottom: 20px;
+}
+
+.header h2 {
+    margin: 0;
+    font-size: 28px;
+}
+
+/* 广告列表样式 */
+.ad-list {
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.ad-list h3 {
+    font-size: 24px;
+    margin-bottom: 20px;
+}
+
+/* 表格样式 */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+}
+
+th, td {
+    padding: 10px;
+    text-align: center;
+    border: 1px solid #ddd;
+}
+
+th {
+    background-color: #007bff;
+    color: white;
+}
+
+tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+tr:hover {
+    background-color: #ddd;
+}
+
+/* 上传API接口区域样式 */
+.api-upload {
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+}
+
+.api-upload h3 {
+    font-size: 24px;
+    margin-bottom: 20px;
+}
+
+.api-upload form {
+    display: flex;
+    flex-direction: column;
+}
+
+.api-upload label {
+    font-size: 16px;
+    margin-bottom: 8px;
+}
+
+.api-upload input[type="file"] {
+    padding: 10px;
+    margin-bottom: 10px;
+    font-size: 16px;
+}
+
+.api-upload input[type="submit"] {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+}
+
+.api-upload input[type="submit"]:hover {
+    background-color: #007bff;
+}
+
+/* 返回登录按钮样式 */
+.newbutton {
+    text-align: center;
+}
+
+.newbutton .button {
+    background-color: #f44336;
+    color: white;
+    padding: 12px 20px;
+    font-size: 16px;
+    text-decoration: none;
+    border-radius: 5px;
+    display: inline-block;
+    transition: background-color 0.3s;
+}
+
+.newbutton .button:hover {
+    background-color: #e53935;
+}

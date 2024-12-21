@@ -1,0 +1,110 @@
+/* 全局设置 */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    margin: 0;
+    padding: 0;
+}
+
+/* 头部 */
+.header {
+    background-color: #007bff;
+    color: white;
+    padding: 15px;
+    text-align: center;
+}
+
+.header h2 {
+    margin: 0;
+}
+
+.header a {
+    color: white;
+    text-decoration: none;
+    background-color: #333;
+    padding: 8px 16px;
+    border-radius: 5px;
+    font-size: 14px;
+}
+
+.header a:hover {
+    background-color: #007bff;
+}
+
+/* 表单容器 */
+.ad-form {
+    margin: 20px;
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+}
+
+.ad-form form {
+    display: flex;
+    flex-direction: column;
+}
+
+.ad-form label {
+    font-size: 16px;
+    margin-bottom: 5px;
+    color: #333;
+}
+
+.ad-form input, .ad-form textarea {
+    font-size: 14px;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    width: 100%;
+}
+
+.ad-form input[type="submit"] {
+    background-color: #007bff;
+    color: white;
+    padding: 12px 30px;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.ad-form input[type="submit"]:hover {
+    background-color: #0056b3;
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+    .header {
+        padding: 10px;
+    }
+
+    .header h2 {
+        font-size: 18px;
+    }
+
+    .ad-form h3 {
+        font-size: 20px;
+    }
+
+    .ad-form input, .ad-form textarea {
+        font-size: 14px;
+    }
+
+    .ad-form input[type="submit"] {
+        padding: 10px 20px;
+        font-size: 14px;
+    }
+}
+.button {
+    background-color: #007bff;
+    color: white;
+    padding: 10px 20px;
+    text-decoration: none;
+    border-radius: 5px;
+}
+
+.button:hover {
+    background-color: #0056b3;
+}
