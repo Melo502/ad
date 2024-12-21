@@ -7,9 +7,9 @@
 <head>
   <!-- 使用会话属性 bpath -->
   <base href="${sessionScope.bpath}">
-  <link rel="stylesheet" type="text/css" href="${sessionScope.bpath}res/static/css/main.css">
-  <link rel="stylesheet" type="text/css" href="${sessionScope.bpath}res/layui/css/layui.css">
-  <script type="text/javascript" src="${sessionScope.bpath}views/js/jquery-2.2.3.min.js"></script>
+  <link rel="stylesheet" type="text/css" href="${sessionScope.bpath}/res/static/css/main.css">
+  <link rel="stylesheet" type="text/css" href="${sessionScope.bpath}/res/layui/css/layui.css">
+  <script type="text/javascript" src="${sessionScope.bpath}/views/js/jquery-2.2.3.min.js"></script>
   <script type="text/javascript" src="${pageContext.request.contextPath}/js/login.js"></script>
   <title>登录</title>
 </head>
