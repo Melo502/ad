@@ -48,9 +48,9 @@ header .top .right .gouwuche:hover{color:#000;background: #666;}
 .banner_x .search .text .shuru{border: none;width: 250px;height: 50px;}
 .banner_x .search .submit{width: 50px;height:50px;line-height: 50px;text-align:center;font-size: 12px;margin-top: 25px;border:1px solid #ccc;}
 .banner_x .search .submit .sousuo{letter-spacing:3px;text-align:center;width: 50px;height:50px;border: none;background: none;cursor:pointer;}
-.banner_x .search .submit:hover{border-color: #ff6700;color:#ff6700;} 
+.banner_x .search .submit:hover{border-color: #ff6700;color:#ff6700;}
 /*banner_y*/
-.banner_y{width:1226px;height:460px;background: url('../images/banner.jpg') no-repeat;}
+.banner_y{width:1226px;height:460px;}
 .banner_y .nav{width: 234px;height: 460px;background: rgb(12,12,19);}
 .banner_y .nav ul{padding: 20px 0;position:relative;}
 .banner_y .nav ul li{display: block;width: 174px;height: 40px;line-height:40px;font-size: 14px;padding: 0 30px;}
@@ -102,8 +102,8 @@ header .top .right .gouwuche:hover{color:#000;background: #666;}
 .sub_banner .datu a img{width: 316px;height: 170px;opacity:0.8;}
 .sub_banner .datu a img:hover{opacity:1;}
 /*danpin*/
-.biaoti{width: 1226px;height: 58px;line-height: 58px;font-size: 
-22px;font-weight: bold;margin-top: 20px;}
+.biaoti{width: 1226px;height: 58px;line-height: 58px;font-size:
+		22px;font-weight: bold;margin-top: 20px;}
 .danpin .main{width: 1226px;height: 340px;}
 .danpin .main .mingxing{width: 234px;height: 339px;background: rgb(250,250,250);}
 .danpin .main .mingxing:nth-of-type(1){border-top: 1px solid orange;margin-right:14px;}
@@ -131,12 +131,12 @@ header .top .right .gouwuche:hover{color:#000;background: #666;}
 .grzxbj .selfinfo .lfnav .subddzx ul li a{color:rgb(117,117,117);}
 .grzxbj .selfinfo .lfnav .subddzx ul li a:hover{color:rgb(51,51,51);}
 .grzxbj .selfinfo .rtcont{ float:left;width: 81%;height: 500px;background: #fff;margin-right: 20px;margin-left: 20px;}
-}
+
 .grzxbj .selfinfo .rtcont .subgrzl span:nth-of-type(3){display: inline-block;font-size: 15px;width: 160px;height: 45px;line-height: 45px;text-align: right;}
 .grzxbj .selfinfo .rtcont .subgrzl span a{color:teal; }
 .grzxbj .selfinfo .rtcont .subgrzl span a:hover{color:#ff6700; }
 
-.grzxbj .selfinfo .rtcont .ddxq{width: 938px;height: 120px;line-height: 120px;font-size: 17px;color:rgb(117,117,117); 
+.grzxbj .selfinfo .rtcont .ddxq{width: 938px;height: 120px;line-height: 120px;font-size: 17px;color:rgb(117,117,117);
 	border-bottom: 1px solid #ccc;padding-left: 40px;}
 .grzxbj .selfinfo .rtcont .ddxq .ddspt{width: 80px;height: 80px;margin: 19px 25px 0 0;border:1px solid #aaa;}
 .grzxbj .selfinfo .rtcont .ddxq .ztxx ul li{display: inline-block;width: 130px;height: 60px;line-height:60px;float: left;border-left:1px solid #aaa; margin-top: 30px;text-align: center;}
