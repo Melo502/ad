@@ -13,13 +13,13 @@
   <script type="text/javascript" src="${pageContext.request.contextPath}/js/login.js"></script>
   <title>登录</title>
 </head>
-<body id="list-cont">
+<body id="list-cont" >
 
 <%@ include file="/top.jsp" %>
 
 
 <div class="content content-nav-base login-content">
-  <div class="login-bg">
+  <div class="login-bg" style="background-image:url(${sessionScope.bpath}/upfiles/background.svg);background-color: ghostwhite">
     <div class="login-cont w1200">
       <div class="form-box">
         <legend>用户登录</legend>
