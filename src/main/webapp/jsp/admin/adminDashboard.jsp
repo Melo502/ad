@@ -14,8 +14,8 @@
 <header class="publicHeader">
     <h1>广告管理系统</h1>
     <div class="publicHeaderR">
-        <p><span>下午好！</span><span style="color: #fff21b"> ${userSession.username }</span> , 欢迎你！</p>
-        <a href="${pageContext.request.contextPath }/jsp/logout.do">退出</a>
+        <p><span>下午好！</span><span style="color: #fff21b"> ${admin.username }</span> , 欢迎你！</p>
+        <a href="${pageContext.request.contextPath }/logout.do?method=adminLogout">退出</a>
     </div>
 </header>
 <!--时间-->
@@ -33,7 +33,7 @@
                 <li><a href="${pageContext.request.contextPath }/adminServlet.do?method=viewAdRecords">点击记录</a></li>
                 <li><a href="${pageContext.request.contextPath }/adminServlet.do?method=adAnalysis">收益信息</a></li>
                 <li><a href="${pageContext.request.contextPath }/adminServlet.do?method=listUser">用户管理</a></li>
-                <li><a href="${pageContext.request.contextPath }/adminServlet.do?method=">退出系统</a></li>
+                <li><a href="${pageContext.request.contextPath }/logout.do?method=adminLogout">退出系统</a></li>
             </ul>
         </nav>
     </div>
@@ -47,6 +47,5 @@
 <script type="text/javascript" src="${pageContext.request.contextPath }/js/time.js"></script>
 <script type="text/javascript" src="${pageContext.request.contextPath }/js/jquery-1.8.3.min.js"></script>
 <script type="text/javascript" src="${pageContext.request.contextPath }/js/common.js"></script>
-<script type="text/javascript" src="${pageContext.request.contextPath }/js/WdatePicker.js"></script>
 </body>
 </html>

@@ -4,7 +4,8 @@ public class User {
     private int id;
     private String username;
     private String password;
-    private String userType; // 登录类型：广告主、网站长、管理员
+    private String userType;// 登录类型：广告主、网站长、管理员
+    private String webSiteName;
 
     // 构造函数、getter 和 setter 方法
 
@@ -47,6 +48,14 @@ public class User {
 
     public void setUserType(String userType) {
         this.userType = userType;
+    }
+
+    public String getWebSiteName() {
+        return webSiteName;
+    }
+
+    public void setWebSiteName(String webSiteName) {
+        this.webSiteName = webSiteName;
     }
 }
 

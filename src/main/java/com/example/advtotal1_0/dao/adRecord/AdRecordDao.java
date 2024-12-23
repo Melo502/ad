@@ -13,7 +13,7 @@ public interface AdRecordDao {
     List<AdRecord> getAllAdRecords() throws Exception;
     List<AdRecord> getAdRecordsFiltered(Date startDate, Date endDate, Double minIncome, Double maxIncome, String website) throws Exception;
     List<String> getAllWebsites() throws Exception;
-    List<AdDetailAggregation> getAdDetailAggregations(String type, String website, Date startDate, Date endDate) throws Exception;
+    List<AdDetailAggregation> getAdDetailAggregations0(String type, String website, Date startDate, Date endDate) throws Exception;
     List<AdDetailAggregation> getAdDetailAggregationsByAdvertiserId(int advertiserId, String type, String website, Date startDate, Date endDate) throws Exception;
     OverallAggregation getOverallAggregationByAdvertiserId(int advertiserId, String type, String website, Date startDate, Date endDate) throws Exception;
     List<String> getAllWebsites(int advertiserId) throws Exception;

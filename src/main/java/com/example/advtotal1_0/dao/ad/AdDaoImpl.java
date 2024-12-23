@@ -310,7 +310,7 @@ public class AdDaoImpl implements AdDao {
     @Override
     public List<String> getAllAdTypes() throws Exception {
         List<String> adTypes = new ArrayList<>();
-        String sql = "SELECT DISTINCT typeKeyWords FROM Ad ORDER BY typeKeyWords";
+        String sql = "SELECT DISTINCT typeKeyWords FROM ad ORDER BY typeKeyWords";
 
         Connection conn = null;
         PreparedStatement pstm = null;
@@ -337,7 +337,7 @@ public class AdDaoImpl implements AdDao {
     @Override
     public List<Ad> getAdsByAdvertiserId(int advertiserId) throws Exception {
         List<Ad> ads = new ArrayList<>();
-        String sql = "SELECT * FROM Ad WHERE advertiserId = ? ORDER BY id DESC";
+        String sql = "SELECT * FROM ad WHERE advertiserId = ? ORDER BY id DESC";
 
         try (Connection conn = BaseDao.getConnection();
              PreparedStatement pstm = conn.prepareStatement(sql)) {
@@ -369,7 +369,7 @@ public class AdDaoImpl implements AdDao {
     @Override
     public List<String> getAllAdTypes(int advertiserId) throws Exception {
         List<String> adTypes = new ArrayList<>();
-        String sql = "SELECT DISTINCT typeKeyWords FROM Ad WHERE advertiserId = ? ORDER BY typeKeyWords";
+        String sql = "SELECT DISTINCT typeKeyWords FROM ad WHERE advertiserId = ? ORDER BY typeKeyWords";
 
         try (Connection conn = BaseDao.getConnection();
              PreparedStatement pstm = conn.prepareStatement(sql)) {
@@ -390,7 +390,7 @@ public class AdDaoImpl implements AdDao {
     @Override
     public List<Ad> searchAdsByTitle(int advertiserId, String title) throws Exception {
         List<Ad> ads = new ArrayList<>();
-        String sql = "SELECT * FROM Ad WHERE advertiserId = ? AND title LIKE ? ORDER BY id DESC";
+        String sql = "SELECT * FROM ad WHERE advertiserId = ? AND title LIKE ? ORDER BY id DESC";
 
         try (Connection conn = BaseDao.getConnection();
              PreparedStatement pstm = conn.prepareStatement(sql)) {
@@ -419,5 +419,102 @@ public class AdDaoImpl implements AdDao {
         }
 
         return ads;
+    }
+
+    @Override
+    public List<Ad> getAdByTitle(String website, String searchTitle) throws Exception {
+        List<Ad> ads = new ArrayList<>();
+        String sql = "SELECT a.id, a.title, a.description, a.imageUrl, a.url, a.typeKeyWords, a.status, a.price " +
+                "FROM ad a " +
+                "JOIN ad_placements ar ON a.id = ar.ad_id " +
+                "WHERE ar.website = ? AND a.title LIKE ? " +
+                "GROUP BY a.id, a.title, a.description, a.imageUrl, a.url, a.typeKeyWords, a.status, a.price";
+        Connection conn = null;
+        PreparedStatement pstm = null;
+        ResultSet rs = null;
+        try {
+            conn = BaseDao.getConnection();
+            Object[] params = {website, "%" + searchTitle + "%"};
+            rs = BaseDao.executeQuery(conn, pstm, rs, sql, params);
+            while (rs.next()) {
+                Ad ad = new Ad();
+                ad.setId(rs.getInt("id"));
+                ad.setTitle(rs.getString("title"));
+                ad.setDescription(rs.getString("description"));
+                ad.setImageUrl(rs.getString("imageUrl"));
+                ad.setUrl(rs.getString("url"));
+                ad.setTypeKeyWords(rs.getString("typeKeyWords"));
+                ad.setStatus(rs.getString("status"));
+                ad.setPrice(rs.getDouble("price"));
+                ads.add(ad);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new Exception("通过广告标题获取广告详细信息失败", e);
+        } finally {
+            BaseDao.closeResource(conn, pstm, rs);
+        }
+        return ads;
+    }
+
+    @Override
+    public List<Ad> getAllAdsByWebsite(String website) throws Exception {
+        List<Ad> ads = new ArrayList<>();
+        String sql = "SELECT DISTINCT a.id, a.title, a.description, a.imageUrl, a.url, a.typeKeyWords, a.status, a.price " +
+                "FROM ad a " +
+                "JOIN ad_placements ar ON a.id = ar.ad_id " +
+                "WHERE ar.website = ? ";
+        Connection conn = null;
+        PreparedStatement pstm = null;
+        ResultSet rs = null;
+        try {
+            conn = BaseDao.getConnection();
+            Object[] params = {website};
+            rs = BaseDao.executeQuery(conn, pstm, rs, sql, params);
+            while (rs.next()) {
+                Ad ad = new Ad();
+                ad.setId(rs.getInt("id"));
+                ad.setTitle(rs.getString("title"));
+                ad.setDescription(rs.getString("description"));
+                ad.setImageUrl(rs.getString("imageUrl"));
+                ad.setUrl(rs.getString("url"));
+                ad.setTypeKeyWords(rs.getString("typeKeyWords"));
+                ad.setStatus(rs.getString("status"));
+                ad.setPrice(rs.getDouble("price"));
+                ads.add(ad);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new Exception("获取所有发布在本网站的广告失败", e);
+        } finally {
+            BaseDao.closeResource(conn, pstm, rs);
+        }
+        return ads;
+    }
+
+    @Override
+    public List<String> getAllAdTypes(String website) throws Exception {
+        List<String> types = new ArrayList<>();
+        String sql = "SELECT DISTINCT a.typeKeyWords FROM ad a JOIN ad_placements ar ON a.id = ar.ad_id WHERE ar.website = ?";
+        Connection conn = null;
+        PreparedStatement pstm = null;
+        ResultSet rs = null;
+        try {
+            conn = BaseDao.getConnection();
+            Object[] params = {website};
+            rs = BaseDao.executeQuery(conn, pstm, rs, sql, params);
+            while (rs.next()) {
+                String type = rs.getString("typeKeyWords");
+                if (type != null && !type.trim().isEmpty()) {
+                    types.add(type.trim());
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new Exception("获取广告类型失败", e);
+        } finally {
+            BaseDao.closeResource(conn, pstm, rs);
+        }
+        return types;
     }
 }

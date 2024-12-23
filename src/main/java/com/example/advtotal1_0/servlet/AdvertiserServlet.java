@@ -1,15 +1,15 @@
 package com.example.advtotal1_0.servlet;
 
+import com.example.advtotal1_0.dao.adPlacement.AdPlacementDao;
 import com.example.advtotal1_0.dao.adType.AdTypeDao;
 import com.example.advtotal1_0.dao.adType.AdTypeDaoImpl;
-import com.example.advtotal1_0.pojo.Ad;
-import com.example.advtotal1_0.pojo.AdRecord;
-import com.example.advtotal1_0.pojo.AdType;
-import com.example.advtotal1_0.pojo.User;
+import com.example.advtotal1_0.pojo.*;
 import com.example.advtotal1_0.service.Dto.AdDetailAggregation;
 import com.example.advtotal1_0.service.Dto.OverallAggregation;
 import com.example.advtotal1_0.service.ad.AdService;
 import com.example.advtotal1_0.service.ad.AdServiceImpl;
+import com.example.advtotal1_0.service.adPlacement.AdPlacementService;
+import com.example.advtotal1_0.service.adPlacement.AdPlacementServiceImpl;
 import com.example.advtotal1_0.service.adRecord.AdRecordService;
 import com.example.advtotal1_0.service.adRecord.AdRecordServiceImpl;
 import com.example.advtotal1_0.util.StaticData;
@@ -17,10 +17,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.MultipartConfig;
 import jakarta.servlet.annotation.WebServlet;
-import jakarta.servlet.http.HttpServlet;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.Part;
+import jakarta.servlet.http.*;
 
 
 import java.io.File;
@@ -118,7 +115,7 @@ public class AdvertiserServlet extends HttpServlet {
      */
     private void viewAd(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         List<Ad> adList = new ArrayList<>();
-        User currentUser = (User) req.getSession().getAttribute(StaticData.ONLINE_USER);
+        User currentUser = (User) req.getSession().getAttribute(StaticData.ONLINE_ADVERTISER);
         int advertiserId = currentUser.getId();
         try {
             adList = adService.getAdsByAdvertiserId(advertiserId);
@@ -150,7 +147,7 @@ public class AdvertiserServlet extends HttpServlet {
     private void createAd(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         // 设置请求编码
         req.setCharacterEncoding("UTF-8");
-        User currentUser = (User) req.getSession().getAttribute(StaticData.ONLINE_USER);
+        User currentUser = (User) req.getSession().getAttribute(StaticData.ONLINE_ADVERTISER);
 
         // 获取表单参数
 
@@ -188,7 +185,7 @@ public class AdvertiserServlet extends HttpServlet {
             String filePath = uploadPath + File.separator + uniqueFileName;
             filePart.write(filePath);
             // 构建 imageUrl（根据实际情况调整）
-            imageUrl = "advertise/images/" + uniqueFileName;
+            imageUrl = StaticData.ROOT_SITE+ "advertise/images/" + uniqueFileName;
         }
 
         // 创建 Ad 对象
@@ -278,7 +275,7 @@ public class AdvertiserServlet extends HttpServlet {
     private void editAd(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         // 设置请求编码
         req.setCharacterEncoding("UTF-8");
-        User currentUser = (User) req.getSession().getAttribute(StaticData.ONLINE_USER);
+        User currentUser = (User) req.getSession().getAttribute(StaticData.ONLINE_ADVERTISER);
 
         // 获取表单参数
         String idParam = req.getParameter("id");
@@ -324,7 +321,7 @@ public class AdvertiserServlet extends HttpServlet {
                 String filePath = uploadPath + File.separator + uniqueFileName;
                 filePart.write(filePath);
                 // 构建 imageUrl（根据实际情况调整）
-                imageUrl = "advertise/images/" + uniqueFileName;
+                imageUrl = StaticData.ROOT_SITE+ "advertise/images/" + uniqueFileName;
             }
 
             // 获取现有广告
@@ -387,7 +384,7 @@ public class AdvertiserServlet extends HttpServlet {
     // 显示投放广告页面
     private void showAdPlacementPage(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         List<Ad> adList = null;
-        User currentUser = (User) req.getSession().getAttribute(StaticData.ONLINE_USER);
+        User currentUser = (User) req.getSession().getAttribute(StaticData.ONLINE_ADVERTISER);
         int advertiserId = currentUser.getId();
         try {
             adList = adService.getAdsByAdvertiserId(advertiserId);
@@ -442,10 +439,26 @@ public class AdvertiserServlet extends HttpServlet {
                 req.getRequestDispatcher("advertiserServlet.do?method=showAdPlacementPage").forward(req, resp);
                 return;
             }
-            boolean success = adService.deployAds(adIds);
+            adService.deployAds(adIds);
 
-            if (!success) {
-                req.setAttribute("message", "批量投放广告失败。");
+            HttpSession session = req.getSession();
+            User user = (User) session.getAttribute(StaticData.ONLINE_ADVERTISER);
+            AdPlacementService adPlacementService = new AdPlacementServiceImpl();
+            AdRecordService adRecordService = new AdRecordServiceImpl();
+
+            // 创建广告投放记录并保存
+            boolean allSuccess = true;
+            for (Integer adId : adIds) {
+                Ad ad = adService.getAdById(adId);
+                adRecordService.recordAdClick(adId,ad.getPrice(),website);
+                AdPlacement placement = new AdPlacement(adId, website, user.getId(), new Date());
+                adPlacementService.placeAd(placement);
+            }
+
+            if (!allSuccess) {
+                req.setAttribute("message", "部分广告投放失败。");
+            } else {
+                req.setAttribute("message", "广告成功投放。");
             }
 
             // 生成广告ID的逗号分隔字符串
@@ -457,17 +470,26 @@ public class AdvertiserServlet extends HttpServlet {
                 }
             }
 
-            // 生成单个广告脚本标签，包含adIds数组
-            String scriptSrc = String.format(
-                    "http://localhost:8080/advertise/js/ad_display.js?adIds=%s",
-                    adIdStrBuilder.toString()
+            String adDisplayJsUrl = String.format(
+                    StaticData.ROOT_SITE + "/js/ad_display.js?adIds=%s",
+                    adIdStrBuilder
             );
-            String adScript = String.format("<script id='adScript' src='%s'></script>", scriptSrc);
 
-            // 将广告代码片段传递给结果页面
+            String adScript = String.format(
+                    "(function() {" +
+                            "    var script = document.createElement('script');" +
+                            "    script.src = '%s';" +
+                            "    script.id = 'adScript';" + // 设置 id 属性
+                            "    script.async = true;" +
+                            "    document.getElementById('ad-container').appendChild(script);" +
+                            "    console.log('广告脚本已插入');" +
+                            "})();",
+                    adDisplayJsUrl
+            );
+
             req.getServletContext().setAttribute("adScripts", adScript);
-            req.getSession().setAttribute("website", website);
 
+            System.out.println(adScript);
             // 将JavaScript代码作为响应返回给前端
             req.getRequestDispatcher("jsp/advertiser/ad_place_result.jsp").forward(req, resp);
 
@@ -480,6 +502,7 @@ public class AdvertiserServlet extends HttpServlet {
 
     private void getAdContent(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         // 设置CORS头，允许跨域请求
+
         resp.setHeader("Access-Control-Allow-Origin", "*");
         resp.setHeader("Access-Control-Allow-Methods", "GET, POST");
         resp.setHeader("Access-Control-Allow-Headers", "Content-Type");
@@ -540,39 +563,44 @@ public class AdvertiserServlet extends HttpServlet {
         }
     }
 
-    void postAd(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        // 设置CORS头，允许跨域请求
-        resp.setHeader("Access-Control-Allow-Origin", "*");
-        resp.setHeader("Access-Control-Allow-Methods", "GET, POST");
-        resp.setHeader("Access-Control-Allow-Headers", "Content-Type");
+    private void postAd(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        try {
+            // 设置CORS头，允许跨域请求（根据实际情况设置）
+            resp.setHeader("Access-Control-Allow-Origin", "*");
+            resp.setHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
+            resp.setHeader("Access-Control-Allow-Headers", "Content-Type");
 
-        // 从ServletContext中获取adScripts属性
-        String adScript = (String) req.getServletContext().getAttribute("adScripts");
+            // 从ServletContext中获取adScripts属性
+            String adScript = (String) req.getServletContext().getAttribute("adScripts");
 
-        // 如果adScript为空，可能是没有设置，做相应处理
-        if (adScript == null) {
-            resp.getWriter().write("广告脚本未设置。");
-            return;
+            // 如果adScript为空，返回错误脚本
+            if (adScript == null) {
+                resp.setContentType("application/javascript;charset=UTF-8");
+                PrintWriter out = resp.getWriter();
+                out.println("console.error('广告脚本未设置。');");
+                return;
+            }
+
+            // 设置响应内容类型为 JavaScript
+            resp.setContentType("application/javascript;charset=UTF-8");
+
+            // 将广告脚本内容作为JavaScript代码返回
+            PrintWriter out = resp.getWriter();
+            out.println(adScript);
+        } catch (Exception e) {
+            // 捕获并处理异常
+            e.printStackTrace();
+            resp.setContentType("application/javascript;charset=UTF-8");
+            resp.getWriter().write("console.error('服务器内部错误，无法返回广告脚本。');");
         }
-
-        // 输出日志，查看adScript内容
-        System.out.println(adScript);
-
-        // 设置响应内容类型
-        resp.setContentType("text/html;charset=utf-8");
-
-        // 将广告脚本输出到响应中
-        PrintWriter out = resp.getWriter();
-        out.println(adScript);
     }
+
 
     void logAdClick(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         resp.setHeader("Access-Control-Allow-Origin", "*");
         resp.setHeader("Access-Control-Allow-Methods", "GET, POST");
         resp.setHeader("Access-Control-Allow-Headers", "Content-Type");
 
-        // 获取广告ID和点击来源网站信息
-        String website = (String) req.getSession().getAttribute("website");
 
         // 读取请求体中的 JSON 数据并解析
         StringBuilder requestBody = new StringBuilder();
@@ -618,11 +646,13 @@ public class AdvertiserServlet extends HttpServlet {
             // 记录广告点击的业务逻辑
             AdRecordService adRecordService = new AdRecordServiceImpl();
             AdService adService = new AdServiceImpl();
+            AdPlacementService adPlacementService = new AdPlacementServiceImpl();
+            String targetWebsite = adPlacementService.getLatestTargetWebsiteByAdId(adId);
             try {
                 Ad ad = adService.getAdById(adId);
                 if (ad != null) {
                     Double income = ad.getPrice();
-                    adRecordService.recordAdClick(adId, income, website);
+                    adRecordService.recordAdClick(adId, income, targetWebsite);
                     resp.setStatus(HttpServletResponse.SC_OK);
                     resp.getWriter().write("广告点击已记录");
                 } else {
@@ -644,7 +674,7 @@ public class AdvertiserServlet extends HttpServlet {
     // 查看广告投放记录
     void viewAdRecords(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         AdRecordService adRecordService = new AdRecordServiceImpl();
-        User currentUser = (User) request.getSession().getAttribute(StaticData.ONLINE_USER);
+        User currentUser = (User) request.getSession().getAttribute(StaticData.ONLINE_ADVERTISER);
         int userId = currentUser.getId();
         List<AdRecord> adRecords = null;
         try {
@@ -691,7 +721,7 @@ public class AdvertiserServlet extends HttpServlet {
         String minIncomeStr = request.getParameter("minIncome");
         String maxIncomeStr = request.getParameter("maxIncome");
         String website = request.getParameter("website");
-        User currentUser = (User) request.getSession().getAttribute(StaticData.ONLINE_USER);
+            User currentUser = (User) request.getSession().getAttribute(StaticData.ONLINE_ADVERTISER);
         int userId = currentUser.getId();
 
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
@@ -749,7 +779,7 @@ public class AdvertiserServlet extends HttpServlet {
     // 搜索广告记录 by Ad title
     private void searchAds(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String searchQuery = request.getParameter("searchQuery");
-        User currentUser = (User) request.getSession().getAttribute(StaticData.ONLINE_USER);
+        User currentUser = (User) request.getSession().getAttribute(StaticData.ONLINE_ADVERTISER);
         int userId = currentUser.getId();
         List<Ad> adList = new ArrayList<>();
         try {
@@ -763,14 +793,17 @@ public class AdvertiserServlet extends HttpServlet {
     }
 
     private void adAnalysis(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        request.setCharacterEncoding("UTF-8");
         // 获取参数，如广告类型、网站、开始时间和结束时间
         String type = request.getParameter("type");
         String website = request.getParameter("website");
         String start = request.getParameter("startDate");
         String end = request.getParameter("endDate");
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-        User currentUser =(User) request.getSession().getAttribute(StaticData.ONLINE_USER);
+        User currentUser =(User) request.getSession().getAttribute(StaticData.ONLINE_ADVERTISER);
         int userId = currentUser.getId();
+
+
 
 
         Date startDate = null;
@@ -781,7 +814,8 @@ public class AdvertiserServlet extends HttpServlet {
                 startDate = sdf.parse(start);
             }
             if (end != null && !end.isEmpty()) {
-                endDate = sdf.parse(end);
+                Date tempEndDate = sdf.parse(end.trim());
+                endDate = new Date(tempEndDate.getTime() + 24 * 60 * 60 * 1000 - 1); // 设置为当天的最后一刻
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -793,7 +827,7 @@ public class AdvertiserServlet extends HttpServlet {
 
         // 如果未提供日期，则默认查询全部
         if (startDate == null) {
-            startDate = new Date(0); // 1970-01-01
+            startDate = new Date(0);
         }
         if (endDate == null) {
             endDate = new Date(); // 当前时间
@@ -809,13 +843,11 @@ public class AdvertiserServlet extends HttpServlet {
 
             // 获取所有广告类型和网站列表，用于下拉菜单
             List<String> adTypes = adService.getAllAdTypes(userId);
-            List<String> websites = adRecordService.getAllWebsites(userId);
 
             // 将数据设置到请求属性中
             request.setAttribute("adAggregations", adAggregations);
             request.setAttribute("overallAggregation", overallAggregation);
             request.setAttribute("adTypes", adTypes);
-            request.setAttribute("websites", websites);
             request.setAttribute("selectedType", type);
             request.setAttribute("selectedWebsite", website);
             request.setAttribute("startDate", sdf.format(startDate));

@@ -33,10 +33,11 @@ public class LoginServlet extends HttpServlet {
 
         HttpSession session = request.getSession(true);
 
+
         // 登录类型不能为空
         if (userType == null || userType.isEmpty()) {
             request.setAttribute("error", "请选择登录类型！");
-            request.getRequestDispatcher("/advertise/jsp/other/login.jsp").forward(request, response);
+            request.getRequestDispatcher(request.getContextPath()+"/jsp/other/login.jsp").forward(request, response);
             return;
         }
 
@@ -47,21 +48,28 @@ public class LoginServlet extends HttpServlet {
             System.out.println("user:"+user);
             if (user != null && user.getUserType().equals(userType) && user.getPassword().equals(password)) {
 
-                // 登录成功，设置 session
-                session.setAttribute(StaticData.ONLINE_USER, user);
 
                 // 跳转到不同的页面
                 if ("广告主".equals(userType)) {
-                    response.sendRedirect("/advertise/jsp/advertiser/advertiserDashboard.jsp"); // 广告主
+                    session.setAttribute(StaticData.ONLINE_ADVERTISER, user);
+                    response.sendRedirect(request.getContextPath()+"/jsp/advertiser/advertiserDashboard.jsp"); // 广告主
                 } else if ("网站长".equals(userType)) {
-                    response.sendRedirect("/advertise/jsp/webMaster/webmasterDashboard.jsp"); // 网站站长
-                } else if ("admin".equals(userType)) {
-                    response.sendRedirect("/advertise/jsp/admin/adminDashboard.jsp"); // 管理员
+                    session.setAttribute(StaticData.ONLINE_WEBMASTER, user);
+                    if(user.getWebSiteName().equals("新闻")){
+                        session.setAttribute("userWebSiteName",StaticData.NEWS_SITE);
+                    }
+                    if(user.getWebSiteName().equals("书城")){
+                        session.setAttribute("userWebSiteName",StaticData.BOOK_SITE);
+                    }
+                    response.sendRedirect(request.getContextPath()+"/jsp/webMaster/webmasterDashboard.jsp"); // 网站站长
+                } else if ("管理员".equals(userType)) {
+                    session.setAttribute(StaticData.ONLINE_ADMIN, user);
+                    response.sendRedirect(request.getContextPath()+"/jsp/admin/adminDashboard.jsp"); // 管理员
                 }
             } else {
                 // 用户验证失败
                 request.setAttribute("error", "账号、密码或用户类型错误！");
-                request.getRequestDispatcher("/advertise/jsp/other/login.jsp").forward(request, response);
+                request.getRequestDispatcher(request.getContextPath()+"/jsp/other/login.jsp").forward(request, response);
             }
 
         } catch (Exception e) {

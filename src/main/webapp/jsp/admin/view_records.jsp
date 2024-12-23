@@ -22,6 +22,28 @@
 <body>
 <!-- 主内容区域 -->
 <div class="content">
+  <!-- 导航栏 -->
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="#">广告管理系统</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+              aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+        <ul class="navbar-nav">
+          <li class="nav-item me-3">
+                        <span class="navbar-text">
+                            下午好！<strong>${admin.username}</strong>, 欢迎你！
+                        </span>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="${pageContext.request.contextPath}/logout.do?method=adminLogout">退出</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
   <div class="container-fluid">
   <h1 class="text-center mt-4">广告点击记录</h1>
 
@@ -74,12 +96,12 @@
             <label for="website" class="sr-only">目标网站</label>
             <select id="website" name="website" class="form-control mb-2">
               <option value="" <c:if test="${empty param.website}">selected</c:if>>所有网站</option>
-              <option value="http://localhost:8080/advertise/jsp/advertiser/test.jsp"
-                      <c:if test="${param.website == 'http://localhost:8080/advertise/jsp/advertiser/test.jsp'}">selected</c:if>>
+              <option value="${applicationScope.NEWS_SITE}"
+                      <c:if test="${param.website == applicationScope.NEWS_SITE}">selected</c:if>>
                 新闻
               </option>
-              <option value="http://localhost:8080/advertise/jsp/advertiser/test.jsp"
-                      <c:if test="${param.website == 'http://localhost:8080/advertise/jsp/advertiser/test.jsp'}">selected</c:if>>
+              <option value="${applicationScope.BOOK_SITE}"
+                      <c:if test="${param.website == applicationScope.BOOK_SITE}">selected</c:if>>
                 书城
               </option>
             </select>

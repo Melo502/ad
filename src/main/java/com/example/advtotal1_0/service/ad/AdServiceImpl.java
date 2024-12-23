@@ -90,4 +90,20 @@ public class AdServiceImpl implements AdService {
             throw new Exception("根据标题搜索广告失败", e);
         }
     }
+
+
+    @Override
+    public List<Ad> getAdByTitle(String website, String searchTitle) throws Exception {
+        return adDao.getAdByTitle(website, searchTitle);
+    }
+
+    @Override
+    public List<Ad> getAllAdsByWebsite(String website) throws Exception {
+        return adDao.getAllAdsByWebsite(website);
+    }
+
+    @Override
+    public List<String> getAllAdTypes(String website) throws Exception {
+        return adDao.getAllAdTypes(website);
+    }
 }

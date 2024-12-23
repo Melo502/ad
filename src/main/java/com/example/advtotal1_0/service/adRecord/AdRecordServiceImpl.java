@@ -58,21 +58,24 @@ public class AdRecordServiceImpl implements AdRecordService {
     }
 
     @Override
-    public List<AdDetailAggregation> getAdDetailAggregations(String type, String website, Date startDate, Date endDate) throws Exception {
-        return adRecordDao.getAdDetailAggregations(type, website, startDate, endDate);
+    public List<AdDetailAggregation> getAdDetailAggregations0(String type, String website, Date startDate, Date endDate) throws Exception {
+        System.out.println("agg1"+adRecordDao.getAdDetailAggregations0(type, website, startDate, endDate));
+        return adRecordDao.getAdDetailAggregations0(type, website, startDate, endDate);
     }
 
     @Override
-    public OverallAggregation getOverallAggregation(String type, String website, Date startDate, Date endDate) throws Exception {
-        List<AdDetailAggregation> adDetailAggregations = adRecordDao.getAdDetailAggregations(type, website, startDate, endDate);
+    public OverallAggregation getOverallAggregation0(String type, String website, Date startDate, Date endDate) throws Exception {
+        List<AdDetailAggregation> adDetailAggregations = adRecordDao.getAdDetailAggregations0(type, website, startDate, endDate);
         int totalClicks = adDetailAggregations.stream().mapToInt(AdDetailAggregation::getTotalClicks).sum();
         double totalIncome = adDetailAggregations.stream().mapToDouble(AdDetailAggregation::getTotalIncome).sum();
+        System.out.println("over"+new OverallAggregation(totalClicks, totalIncome));
         return new OverallAggregation(totalClicks, totalIncome);
     }
 
     @Override
     public List<AdDetailAggregation> getAdDetailAggregations(int advertiserId, String type, String website, Date startDate, Date endDate) throws Exception {
         try {
+            System.out.println("service.Aggregations"+adRecordDao.getAdDetailAggregationsByAdvertiserId(advertiserId, type, website, startDate, endDate));
             return adRecordDao.getAdDetailAggregationsByAdvertiserId(advertiserId, type, website, startDate, endDate);
         } catch (Exception e) {
             throw new Exception("获取广告详细聚合数据失败", e);
@@ -82,6 +85,7 @@ public class AdRecordServiceImpl implements AdRecordService {
     @Override
     public OverallAggregation getOverallAggregation(int advertiserId, String type, String website, Date startDate, Date endDate) throws Exception {
         try {
+            System.out.println("service.overallAggregations"+adRecordDao.getOverallAggregationByAdvertiserId(advertiserId, type, website, startDate, endDate));
             return adRecordDao.getOverallAggregationByAdvertiserId(advertiserId, type, website, startDate, endDate);
         } catch (Exception e) {
             throw new Exception("获取总体聚合数据失败", e);
@@ -105,4 +109,5 @@ public class AdRecordServiceImpl implements AdRecordService {
             throw new Exception("获取广告记录失败", e);
         }
     }
+
 }

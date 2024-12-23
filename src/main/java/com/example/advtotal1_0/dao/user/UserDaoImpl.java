@@ -4,10 +4,7 @@ package com.example.advtotal1_0.dao.user;
 import com.example.advtotal1_0.dao.common.BaseDao;
 import com.example.advtotal1_0.pojo.User;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,6 +30,7 @@ public class UserDaoImpl implements UserDao {
                 user.setUsername(rs.getString("username"));
                 user.setPassword(rs.getString("password"));
                 user.setUserType(rs.getString("user_type"));
+                user.setWebSiteName(rs.getString("webSiteName"));
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -79,6 +77,7 @@ public class UserDaoImpl implements UserDao {
                 user.setUsername(rs.getString("username"));
                 user.setPassword(rs.getString("password"));
                 user.setUserType(rs.getString("user_type"));
+                user.setWebSiteName(rs.getString("webSiteName"));
                 users.add(user);
             }
         } catch (Exception e) {
@@ -107,6 +106,7 @@ public class UserDaoImpl implements UserDao {
                 user.setUsername(rs.getString("username"));
                 user.setPassword(rs.getString("password"));
                 user.setUserType(rs.getString("user_type"));
+                user.setWebSiteName(rs.getString("webSiteName"));
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -119,40 +119,51 @@ public class UserDaoImpl implements UserDao {
 
     @Override
     public int addUser1(User user) throws Exception {
-        int result = 0;
-        String sql = "INSERT INTO users (username, password, user_type) VALUES (?, ?, ?)";
+        String sql = "INSERT INTO users ( username, password, user_type, webSiteName) VALUES (?, ?, ?, ?)";
         Connection conn = null;
         PreparedStatement pstm = null;
         try {
             conn = BaseDao.getConnection();
-            Object[] params = {user.getUsername(), user.getPassword(), user.getUserType()};
-            result = BaseDao.execute(conn, pstm, sql, params);
+            pstm = conn.prepareStatement(sql);
+            pstm.setString(1, user.getUsername());
+            pstm.setString(2, user.getPassword());
+            pstm.setString(3, user.getUserType());
+            if ("网站长".equals(user.getUserType())) {
+                pstm.setString(4, user.getWebSiteName());
+            } else {
+                pstm.setNull(4, Types.VARCHAR);
+            }
+            return pstm.executeUpdate();
         } catch (Exception e) {
-            e.printStackTrace();
             throw new Exception("添加用户失败", e);
         } finally {
             BaseDao.closeResource(conn, pstm, null);
         }
-        return result;
     }
 
     @Override
     public int updateUser(User user) throws Exception {
-        int result = 0;
-        String sql = "UPDATE users SET username = ?, password = ?, user_type = ? WHERE id = ?";
+        String sql = "UPDATE users SET username = ?, password = ?, user_type = ?, webSiteName = ? WHERE id = ?";
         Connection conn = null;
         PreparedStatement pstm = null;
         try {
             conn = BaseDao.getConnection();
-            Object[] params = {user.getUsername(), user.getPassword(), user.getUserType(), user.getId()};
-            result = BaseDao.execute(conn, pstm, sql, params);
+            pstm = conn.prepareStatement(sql);
+            pstm.setString(1, user.getUsername());
+            pstm.setString(2, user.getPassword());
+            pstm.setString(3, user.getUserType());
+            if ("网站长".equals(user.getUserType())) {
+                pstm.setString(4, user.getWebSiteName());
+            } else {
+                pstm.setNull(4, Types.VARCHAR);
+            }
+            pstm.setInt(5, user.getId());
+            return pstm.executeUpdate();
         } catch (Exception e) {
-            e.printStackTrace();
             throw new Exception("更新用户失败", e);
         } finally {
             BaseDao.closeResource(conn, pstm, null);
         }
-        return result;
     }
 
     @Override

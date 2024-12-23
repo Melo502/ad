@@ -235,7 +235,7 @@ public class AdminServlet extends HttpServlet {
                 String filePath = uploadPath + File.separator + uniqueFileName;
                 filePart.write(filePath);
                 // 构建 imageUrl（根据实际情况调整）
-                imageUrl = "images/" + uniqueFileName;
+                imageUrl = StaticData.ROOT_SITE+ "advertise/images/" + uniqueFileName;
             }
 
             // 获取现有广告
@@ -409,13 +409,17 @@ public class AdminServlet extends HttpServlet {
     }
 
     private void adAnalysis(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        // 获取参数，如广告类型、网站、开始时间和结束时间
+        request.setCharacterEncoding("UTF-8");
+
         String type = request.getParameter("type");
         String website = request.getParameter("website");
         String start = request.getParameter("startDate");
         String end = request.getParameter("endDate");
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 
+        // 打印接收到的参数
+        System.out.println("Received parameters - type: " + type + ", website: " + website + ", startDate: " + start + ", endDate: " + end);
+
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 
         Date startDate = null;
         Date endDate = null;
@@ -425,11 +429,11 @@ public class AdminServlet extends HttpServlet {
                 startDate = sdf.parse(start);
             }
             if (end != null && !end.isEmpty()) {
-                endDate = sdf.parse(end);
+                Date tempEndDate = sdf.parse(end.trim());
+                endDate = new Date(tempEndDate.getTime() + 24 * 60 * 60 * 1000 - 1);
             }
         } catch (Exception e) {
             e.printStackTrace();
-            // 处理日期解析错误，可以设置默认值或返回错误信息
             request.setAttribute("error", "日期格式错误，请使用YYYY-MM-DD格式。");
             request.getRequestDispatcher("jsp/admin/error.jsp").forward(request, response);
             return;
@@ -437,7 +441,7 @@ public class AdminServlet extends HttpServlet {
 
         // 如果未提供日期，则默认查询全部
         if (startDate == null) {
-            startDate = new Date(0); // 1970-01-01
+            startDate = new Date(0);
         }
         if (endDate == null) {
             endDate = new Date(); // 当前时间
@@ -447,19 +451,16 @@ public class AdminServlet extends HttpServlet {
         AdRecordService adRecordService = new AdRecordServiceImpl();
         try {
             // 获取每个广告的聚合数据
-            List<AdDetailAggregation> adAggregations = adRecordService.getAdDetailAggregations(type, website, startDate, endDate);
+            List<AdDetailAggregation> adAggregations = adRecordService.getAdDetailAggregations0(type, website, startDate, endDate);
+            System.out.println("agg2: " + adAggregations);
             // 获取总体聚合数据
-            OverallAggregation overallAggregation = adRecordService.getOverallAggregation(type, website, startDate, endDate);
-
-            // 获取所有广告类型和网站列表，用于下拉菜单
+            OverallAggregation overallAggregation = adRecordService.getOverallAggregation0(type, website, startDate, endDate);
+            System.out.println("over1: " + overallAggregation);
             List<String> adTypes = adService.getAllAdTypes();
-            List<String> websites = adRecordService.getAllWebsites();
 
-            // 将数据设置到请求属性中
             request.setAttribute("adAggregations", adAggregations);
             request.setAttribute("overallAggregation", overallAggregation);
             request.setAttribute("adTypes", adTypes);
-            request.setAttribute("websites", websites);
             request.setAttribute("selectedType", type);
             request.setAttribute("selectedWebsite", website);
             request.setAttribute("startDate", sdf.format(startDate));
@@ -473,8 +474,8 @@ public class AdminServlet extends HttpServlet {
             request.setAttribute("error", "广告分析数据加载失败：" + e.getMessage());
             request.getRequestDispatcher("jsp/admin/error.jsp").forward(request, response);
         }
-
     }
+
 
 
     // 列出所有用户
@@ -491,6 +492,9 @@ public class AdminServlet extends HttpServlet {
 
     // 显示添加用户表单
     private void showAddUserForm(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        List<String> websites = Arrays.asList("新闻", "书城");
+        request.setAttribute("websites", websites);
+        System.out.println("websites: " + websites);
         request.getRequestDispatcher("jsp/admin/user_add.jsp").forward(request, response);
     }
 
@@ -500,6 +504,7 @@ public class AdminServlet extends HttpServlet {
         String username = request.getParameter("username");
         String password = request.getParameter("password");
         String userType = request.getParameter("userType");
+        String website = request.getParameter("websiteName"); // 仅当 userType 为 "webmaster" 时有值
 
         // 基本验证
         if(username == null || username.trim().isEmpty() ||
@@ -510,11 +515,21 @@ public class AdminServlet extends HttpServlet {
             return;
         }
 
+        // 如果用户类型是 "webmaster"，则必须选择一个网站
+        if("网站长".equals(userType) && (website == null || website.trim().isEmpty())){
+            request.setAttribute("error", "请选择管理的网站。");
+            request.getRequestDispatcher("jsp/admin/error.jsp").forward(request, response);
+            return;
+        }
+
         // 创建用户对象
         User user = new User();
         user.setUsername(username.trim());
         user.setPassword(password.trim());
         user.setUserType(userType.trim());
+        if("网站长".equals(userType)){
+            user.setWebSiteName(website.trim());
+        }
 
         // 添加用户
         int result = 0;
@@ -522,7 +537,11 @@ public class AdminServlet extends HttpServlet {
             result = userService.addUser1(user);
         } catch (Exception e) {
             e.printStackTrace();
+            request.setAttribute("error", "添加用户时发生错误。");
+            request.getRequestDispatcher("jsp/admin/error.jsp").forward(request, response);
+            return;
         }
+
         if(result > 0){
             response.sendRedirect(request.getContextPath() + "/adminServlet.do?method=listUser");
         } else {
@@ -540,12 +559,15 @@ public class AdminServlet extends HttpServlet {
             return;
         }
 
-        int id = Integer.parseInt(idStr);
+        int userId = Integer.parseInt(idStr.trim());
         User user = null;
         try {
-            user = userService.getUserById(id);
+            user = userService.getUserById(userId);
         } catch (Exception e) {
             e.printStackTrace();
+            request.setAttribute("error", "获取用户信息时发生错误。");
+            request.getRequestDispatcher("jsp/admin/error.jsp").forward(request, response);
+            return;
         }
         if(user == null){
             request.setAttribute("error", "未找到该用户。");
@@ -553,6 +575,9 @@ public class AdminServlet extends HttpServlet {
             return;
         }
 
+        // 获取网站列表
+        List<String> websites = Arrays.asList("新闻", "书城");
+        request.setAttribute("websites", websites);
         request.setAttribute("user", user);
         request.getRequestDispatcher("jsp/admin/user_edit.jsp").forward(request, response);
     }
@@ -564,6 +589,7 @@ public class AdminServlet extends HttpServlet {
         String username = request.getParameter("username");
         String password = request.getParameter("password");
         String userType = request.getParameter("userType");
+        String website = request.getParameter("websiteName"); // 仅当 userType 为 "webmaster" 时有值
 
         // 基本验证
         if(idStr == null || idStr.trim().isEmpty() ||
@@ -575,12 +601,21 @@ public class AdminServlet extends HttpServlet {
             return;
         }
 
-        int id = Integer.parseInt(idStr);
+        if("网站长".equals(userType) && (website == null || website.trim().isEmpty())){
+            request.setAttribute("error", "请选择管理的网站。");
+            request.getRequestDispatcher("jsp/admin/error.jsp").forward(request, response);
+            return;
+        }
+
+        int userId =Integer.parseInt(idStr.trim());
         User user = null;
         try {
-            user = userService.getUserById(id);
+            user = userService.getUserById(userId);
         } catch (Exception e) {
             e.printStackTrace();
+            request.setAttribute("error", "获取用户信息时发生错误。");
+            request.getRequestDispatcher("jsp/admin/error.jsp").forward(request, response);
+            return;
         }
         if(user == null){
             request.setAttribute("error", "未找到该用户。");
@@ -592,6 +627,11 @@ public class AdminServlet extends HttpServlet {
         user.setUsername(username.trim());
         user.setPassword(password.trim());
         user.setUserType(userType.trim());
+        if("网站长".equals(userType)){
+            user.setWebSiteName(website.trim());
+        } else {
+            user.setWebSiteName(null);
+        }
 
         // 更新用户
         int result = 0;
@@ -599,7 +639,11 @@ public class AdminServlet extends HttpServlet {
             result = userService.updateUser(user);
         } catch (Exception e) {
             e.printStackTrace();
+            request.setAttribute("error", "更新用户时发生错误。");
+            request.getRequestDispatcher("jsp/admin/error.jsp").forward(request, response);
+            return;
         }
+
         if(result > 0){
             response.sendRedirect(request.getContextPath() + "/adminServlet.do?method=listUser");
         } else {

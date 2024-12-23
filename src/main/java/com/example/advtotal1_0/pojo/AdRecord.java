@@ -10,6 +10,24 @@ public class AdRecord {
     private Date clickTime;//广告的点击时间
     private String website;//投放的网站
 
+    public AdRecord() {
+    }
+
+    public AdRecord(int adId, double income, Date clickTime, String website) {
+        this.adId = adId;
+        this.income = income;
+        this.clickTime = clickTime;
+        this.website = website;
+    }
+
+    public AdRecord(int id, int adId, double income, Date clickTime, String website) {
+        this.id = id;
+        this.adId = adId;
+        this.income = income;
+        this.clickTime = clickTime;
+        this.website = website;
+    }
+
     public int getId() {
         return id;
     }

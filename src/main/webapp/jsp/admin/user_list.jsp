@@ -11,6 +11,28 @@
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
 </head>
 <body>
+<!-- 导航栏 -->
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="#">广告管理系统</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+      <ul class="navbar-nav">
+        <li class="nav-item me-3">
+                        <span class="navbar-text">
+                            下午好！<strong>${admin.username}</strong>, 欢迎你！
+                        </span>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="${pageContext.request.contextPath}/logout.do?method=adminLogout">退出</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
 <div class="container mt-5">
   <div class="d-flex justify-content-between align-items-center mb-4">
     <h2>用户列表</h2>
@@ -24,6 +46,7 @@
       <th>用户ID</th>
       <th>用户名</th>
       <th>用户类型</th>
+      <th>管理的网站</th>
       <th>操作</th>
     </tr>
     </thead>
@@ -33,6 +56,12 @@
         <td>${user.id}</td>
         <td>${user.username}</td>
         <td>${user.userType}</td>
+        <td>
+          <c:choose>
+            <c:when test="${user.userType == '网站长'}">${user.webSiteName}</c:when>
+            <c:otherwise>—</c:otherwise>
+          </c:choose>
+        </td>
         <td>
           <a href="${pageContext.request.contextPath}/adminServlet.do?method=showEditUser&id=${user.id}" class="btn btn-sm btn-warning me-2">
             <i class="bi bi-pencil-square"></i> 编辑

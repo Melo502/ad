@@ -145,7 +145,7 @@ public class AdRecordDaoImpl implements AdRecordDao {
     @Override
     public List<String> getAllWebsites() throws Exception {
         List<String> websites = new ArrayList<>();
-        String sql = "SELECT DISTINCT website FROM AdRecord ORDER BY website";
+        String sql = "SELECT DISTINCT website FROM adrecord ORDER BY website";
 
         Connection conn = null;
         PreparedStatement pstm = null;
@@ -170,83 +170,95 @@ public class AdRecordDaoImpl implements AdRecordDao {
     }
 
     @Override
-    public List<AdDetailAggregation> getAdDetailAggregations(String type, String website, Date startDate, Date endDate) throws Exception {
-        List<AdDetailAggregation> aggregations = new ArrayList<>();
-        StringBuilder sql = new StringBuilder();
-        sql.append("SELECT a.id AS adId, a.title AS adTitle, COUNT(r.id) AS clickCount, SUM(r.income) AS totalIncome ");
-        sql.append("FROM Ad a ");
-        sql.append("JOIN AdRecord r ON a.id = r.adId ");
-        sql.append("WHERE 1=1 ");
+    public List<AdDetailAggregation> getAdDetailAggregations0(String type, String website, Date startDate, Date endDate) throws Exception {
+            List<AdDetailAggregation> aggregations = new ArrayList<>();
+            StringBuilder sql = new StringBuilder();
+            sql.append("SELECT a.id AS adId, a.title AS adTitle, COUNT(r.id) AS clickCount, SUM(r.income) AS totalIncome ");
+            sql.append("FROM Ad a ");
+            sql.append("JOIN adrecord r ON a.id = r.adId ");
+            sql.append("WHERE 1=1 ");
 
-        // 动态添加过滤条件
-        if (type != null && !type.trim().isEmpty()) {
-            sql.append("AND a.typeKeyWords = ? ");
-        }
-        if (website != null && !website.trim().isEmpty()) {
-            sql.append("AND r.website = ? ");
-        }
-        if (startDate != null) {
-            sql.append("AND r.clickTime >= ? ");
-        }
-        if (endDate != null) {
-            sql.append("AND r.clickTime <= ? ");
-        }
-
-        sql.append("GROUP BY a.id, a.title ");
-        sql.append("ORDER BY a.id, a.title");
-
-        Connection conn = null;
-        PreparedStatement pstm = null;
-        ResultSet rs = null;
-
-        try {
-            conn =BaseDao.getConnection();
-            pstm = conn.prepareStatement(sql.toString());
-
-            int paramIndex = 1;
+            // 动态添加过滤条件
             if (type != null && !type.trim().isEmpty()) {
-                pstm.setString(paramIndex++, type);
+                sql.append("AND a.typeKeyWords = ? ");
             }
             if (website != null && !website.trim().isEmpty()) {
-                pstm.setString(paramIndex++, website);
+                sql.append("AND r.website = ? ");
             }
             if (startDate != null) {
-                pstm.setTimestamp(paramIndex++, new java.sql.Timestamp(startDate.getTime()));
+                sql.append("AND r.clickTime >= ? ");
             }
             if (endDate != null) {
-                pstm.setTimestamp(paramIndex++, new java.sql.Timestamp(endDate.getTime()));
+                sql.append("AND r.clickTime <= ? ");
             }
 
-            rs = pstm.executeQuery();
-            while (rs.next()) {
-                AdDetailAggregation agg = new AdDetailAggregation();
-                agg.setAdId(rs.getInt("adId"));
-                agg.setAdTitle(rs.getString("adTitle"));
-                agg.setTotalClicks(rs.getInt("clickCount"));
-                agg.setTotalIncome(rs.getDouble("totalIncome"));
-                aggregations.add(agg);
+            sql.append("GROUP BY a.id, a.title ");
+            sql.append("ORDER BY a.id, a.title");
+
+            Connection conn = null;
+            PreparedStatement pstm = null;
+            ResultSet rs = null;
+
+            try {
+                conn = BaseDao.getConnection();
+                pstm = conn.prepareStatement(sql.toString());
+
+                int paramIndex = 1;
+                StringBuilder paramLog = new StringBuilder();
+                if (type != null && !type.trim().isEmpty()) {
+                    pstm.setString(paramIndex++, type);
+                    paramLog.append("type=").append(type).append(", ");
+                }
+                if (website != null && !website.trim().isEmpty()) {
+                    pstm.setString(paramIndex++, website);
+                    paramLog.append("website=").append(website).append(", ");
+                }
+                if (startDate != null) {
+                    pstm.setTimestamp(paramIndex++, new java.sql.Timestamp(startDate.getTime()));
+                    paramLog.append("startDate=").append(startDate).append(", ");
+                }
+                if (endDate != null) {
+                    pstm.setTimestamp(paramIndex++, new java.sql.Timestamp(endDate.getTime()));
+                    paramLog.append("endDate=").append(endDate).append(", ");
+                }
+
+                // 打印 SQL 和参数
+                System.out.println("Executing SQL: " + sql.toString());
+                System.out.println("With Parameters: " + paramLog.toString());
+
+                rs = pstm.executeQuery();
+                while (rs.next()) {
+                    AdDetailAggregation agg = new AdDetailAggregation();
+                    agg.setAdId(rs.getInt("adId"));
+                    agg.setAdTitle(rs.getString("adTitle"));
+                    agg.setTotalClicks(rs.getInt("clickCount"));
+                    agg.setTotalIncome(rs.getDouble("totalIncome"));
+                    aggregations.add(agg);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+                throw new Exception("获取广告详细聚合数据失败", e);
+            } finally {
+                BaseDao.closeResource(conn, pstm, rs);
             }
-        } catch (Exception e) {
-            e.printStackTrace();
-            throw new Exception("获取广告详细聚合数据失败", e);
-        } finally {
-            BaseDao.closeResource(conn, pstm, rs);
+            System.out.println("agg: " + aggregations);
+            return aggregations;
         }
 
-        return aggregations;
-    }
 
-
-    @Override
+        @Override
     public List<AdDetailAggregation> getAdDetailAggregationsByAdvertiserId(int advertiserId, String type, String website, Date startDate, Date endDate) throws Exception {
         List<AdDetailAggregation> aggregations = new ArrayList<>();
         StringBuilder sql = new StringBuilder();
         sql.append("SELECT a.id AS adId, a.title AS adTitle, COUNT(r.id) AS clickCount, SUM(r.income) AS totalIncome ");
-        sql.append("FROM Ad a ");
-        sql.append("JOIN AdRecord r ON a.id = r.adId ");
-        sql.append("WHERE a.advertiserId = ? ");
+        sql.append("FROM ad a ");
+        sql.append("JOIN adrecord r ON a.id = r.adId ");
+        sql.append("WHERE 1=1 ");
 
         // 动态添加过滤条件
+        if(advertiserId != 0){
+            sql.append("AND a.advertiserId = ? ");
+        }
         if (type != null && !type.trim().isEmpty()) {
             sql.append("AND a.typeKeyWords = ? ");
         }
@@ -267,7 +279,9 @@ public class AdRecordDaoImpl implements AdRecordDao {
              PreparedStatement pstm = conn.prepareStatement(sql.toString())) {
 
             int paramIndex = 1;
-            pstm.setInt(paramIndex++, advertiserId);
+            if(advertiserId != 0){
+                pstm.setInt(paramIndex++, advertiserId);
+            }
             if (type != null && !type.trim().isEmpty()) {
                 pstm.setString(paramIndex++, type);
             }
@@ -295,7 +309,7 @@ public class AdRecordDaoImpl implements AdRecordDao {
         } catch (Exception e) {
             throw new Exception("获取广告详细聚合数据失败", e);
         }
-
+        System.out.println("Dao.aggregations: " + aggregations);
         return aggregations;
     }
 
@@ -304,11 +318,14 @@ public class AdRecordDaoImpl implements AdRecordDao {
         OverallAggregation overallAggregation = new OverallAggregation();
         StringBuilder sql = new StringBuilder();
         sql.append("SELECT COUNT(r.id) AS totalClicks, SUM(r.income) AS totalIncome ");
-        sql.append("FROM Ad a ");
-        sql.append("JOIN AdRecord r ON a.id = r.adId ");
-        sql.append("WHERE a.advertiserId = ? ");
+        sql.append("FROM ad a ");
+        sql.append("JOIN adrecord r ON a.id = r.adId ");
+        sql.append("WHERE 1=1 ");
 
         // 动态添加过滤条件
+        if(advertiserId != 0){
+            sql.append("AND a.advertiserId = ? ");
+        }
         if (type != null && !type.trim().isEmpty()) {
             sql.append("AND a.typeKeyWords = ? ");
         }
@@ -326,7 +343,9 @@ public class AdRecordDaoImpl implements AdRecordDao {
              PreparedStatement pstm = conn.prepareStatement(sql.toString())) {
 
             int paramIndex = 1;
-            pstm.setInt(paramIndex++, advertiserId);
+            if(advertiserId != 0){
+                pstm.setInt(paramIndex++, advertiserId);
+            }
             if (type != null && !type.trim().isEmpty()) {
                 pstm.setString(paramIndex++, type);
             }
@@ -350,7 +369,7 @@ public class AdRecordDaoImpl implements AdRecordDao {
         } catch (Exception e) {
             throw new Exception("获取总体聚合数据失败", e);
         }
-
+        System.out.println("Dao.overallAggregation: " + overallAggregation);
         return overallAggregation;
     }
 
@@ -358,7 +377,7 @@ public class AdRecordDaoImpl implements AdRecordDao {
     @Override
     public List<String> getAllWebsites(int advertiserId) throws Exception {
         List<String> websites = new ArrayList<>();
-        String sql = "SELECT DISTINCT website FROM AdRecord a JOIN Ad ad ON a.adId = ad.id WHERE ad.advertiserId = ? ORDER BY website";
+        String sql = "SELECT DISTINCT website FROM adrecord a JOIN ad ad ON a.adId = ad.id WHERE ad.advertiserId = ? ORDER BY website";
 
         try (Connection conn = getConnection();
              PreparedStatement pstm = conn.prepareStatement(sql)) {
@@ -381,10 +400,13 @@ public class AdRecordDaoImpl implements AdRecordDao {
     public List<AdRecord> getAdRecordsFiltered(int advertiserId, Date startDate, Date endDate, Double minIncome, Double maxIncome, String website) throws Exception {
         List<AdRecord> adRecords = new ArrayList<>();
         StringBuilder sql = new StringBuilder();
-        sql.append("SELECT r.* FROM AdRecord r JOIN Ad a ON r.adId = a.id ");
-        sql.append("WHERE a.advertiserId = ? ");
+        sql.append("SELECT r.* FROM adrecord r JOIN ad a ON r.adId = a.id ");
+        sql.append("WHERE 1=1 ");
 
         // 动态添加过滤条件
+        if(advertiserId !=0 ){
+            sql.append("AND a.advertiserId = ? ");
+        }
         if (startDate != null) {
             sql.append("AND r.clickTime >= ? ");
         }
@@ -407,7 +429,9 @@ public class AdRecordDaoImpl implements AdRecordDao {
              PreparedStatement pstm = conn.prepareStatement(sql.toString())) {
 
             int paramIndex = 1;
-            pstm.setInt(paramIndex++, advertiserId);
+            if(advertiserId !=0){
+                pstm.setInt(paramIndex++, advertiserId);
+            }
             if (startDate != null) {
                 pstm.setTimestamp(paramIndex++, new java.sql.Timestamp(startDate.getTime()));
             }
@@ -442,5 +466,6 @@ public class AdRecordDaoImpl implements AdRecordDao {
 
         return adRecords;
     }
+
 }
 

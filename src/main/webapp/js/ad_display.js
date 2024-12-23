@@ -22,6 +22,7 @@
                     console.log('Bootstrap 已加载');
                     resolve();  // 所有资源加载完成后执行 resolve
                 };
+                bootstrapScript.onerror = reject;
                 document.body.appendChild(bootstrapScript);
             };
             jqueryScript.onerror = reject;  // 处理加载失败
@@ -62,8 +63,8 @@
             console.log('广告ID字符串:', adIds);
 
             // 构建 API 请求 URL（POST 方法）
-            const contextPath = window.location.pathname.replace(/\/[^\/]*$/, '');
-            const apiUrl = `/advertise/advertiserServlet.do?method=getAdContent`;
+            const apiUrl = '\n' +
+                'http://localhost:8080/advertise/advertiserServlet.do?method=getAdContent';
 
             // 发送广告ID数组作为请求体的 JSON
             fetch(apiUrl, {
@@ -98,7 +99,7 @@
     });
 
 
-        /**
+    /**
      * 显示广告的函数
      * @param {Array} adDataArray - 广告数据数组
      */
@@ -141,8 +142,8 @@
             adLink.href = sanitizeUrl(adData.url);
             adLink.target = "_blank";
             adLink.innerHTML = `
-            <img src="${sanitizeUrl(adData.imageUrl)}" class="d-block w-100" alt="${sanitizeText(adData.title)}">
-        `;
+                <img src="${sanitizeUrl(adData.imageUrl)}" class="d-block w-100" alt="${sanitizeText(adData.title)}">
+            `;
 
             // 为每个广告项添加点击事件监听
             adLink.addEventListener('click', function(event) {
@@ -156,9 +157,9 @@
             const carouselCaption = document.createElement('div');
             carouselCaption.classList.add('carousel-caption', 'd-none', 'd-md-block');
             carouselCaption.innerHTML = `
-            <h5>${sanitizeText(adData.title)}</h5>
-            <p>${sanitizeText(adData.description)}</p>
-        `;
+                <h5>${sanitizeText(adData.title)}</h5>
+                <p>${sanitizeText(adData.description)}</p>
+            `;
             carouselItem.appendChild(carouselCaption);
 
             carouselInner.appendChild(carouselItem);
@@ -184,9 +185,9 @@
         prevButton.setAttribute('data-bs-target', '#bannerCarousel');
         prevButton.setAttribute('data-bs-slide', 'prev');
         prevButton.innerHTML = `
-        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-        <span class="visually-hidden">上一张</span>
-    `;
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">上一张</span>
+        `;
 
         const nextButton = document.createElement('button');
         nextButton.classList.add('carousel-control-next');
@@ -194,9 +195,9 @@
         nextButton.setAttribute('data-bs-target', '#bannerCarousel');
         nextButton.setAttribute('data-bs-slide', 'next');
         nextButton.innerHTML = `
-        <span class="carousel-control-next-icon" aria-hidden="true"></span>
-        <span class="visually-hidden">下一张</span>
-    `;
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">下一张</span>
+        `;
 
         carouselContainer.appendChild(prevButton);
         carouselContainer.appendChild(nextButton);
@@ -231,7 +232,8 @@
      * @param {string} adId - 广告ID
      */
     function logAdClick(adId) {
-        fetch(`/advertise/advertiserServlet.do?method=logAdClick`, {
+        fetch(`
+http://localhost:8080/advertise/advertiserServlet.do?method=logAdClick`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -298,7 +300,7 @@
             /* 自定义轮播样式 */
             .banner-carousel {
                 position: relative;
-                margin: 20px auto; /* 上下间距 20px，左右自动居中 */
+                margin: 0 auto; /* 上下间距 0，左右自动居中 */
                 max-width: 1000px; /* 最大宽度 */
                 box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* 添加阴影 */
                 border-radius: 10px; /* 圆角 */
@@ -306,19 +308,19 @@
             }
             .banner-carousel.carousel-item img {
                 width: 100%;
-                height: 200px; /* 默认高度 */
+                height: 100%; /* 默认高度 */
                 object-fit: cover;
                 border-radius: 10px; /* 与容器圆角一致 */
             }
             /* 响应式设计 */
-            @media (max-width: 768px) {
+            @media (max-width: 2000px) {
                 .banner-carousel .carousel-item img {
-                    height: 150px;
+                    height: 100%;
                 }
             }
-            @media (min-width: 1200px) {
+            @media (min-width: 2000px) {
                 .banner-carousel .carousel-item img {
-                    height: 300px;
+                    height: 100%;
                 }
             }
         `;

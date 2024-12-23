@@ -12,6 +12,28 @@
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/successPlace.css">
 </head>
 <body>
+<!-- 导航栏 -->
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="#">广告管理系统</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+            <ul class="navbar-nav">
+                <li class="nav-item me-3">
+                        <span class="navbar-text">
+                            下午好！<strong>${advertiser.username}</strong>, 欢迎你！
+                        </span>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="${pageContext.request.contextPath}/logout.do?method=advertiserLogout">退出</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-md-8">
@@ -27,7 +49,7 @@
                         <ol>
                             <li>
                                 <p>确保在目标界面中引用了下面的静态代码：</p>
-                                <pre><code>&lt;script src="${pageContext.request.contextPath}/js/loadAd.js"&gt;&lt;/script&gt;</code></pre>
+                                <pre><code>&lt;script src="http://47.100.137.139:8080//advertise/advertiserServlet.do?method=postAd"&gt;&lt;/script&gt;</code></pre>
                                 <p><strong>注释：</strong>上述代码引入了自定义的广告加载脚本。</p>
                             </li>
                             <li>
@@ -37,7 +59,7 @@
                             </li>
                         </ol>
                         <div class="btn-group-custom mt-4">
-                            <a href="${website}" class="btn btn-primary btn-lg">
+                            <a href="${pageContext.request.contextPath}/jsp/advertiser/test.jsp" class="btn btn-primary btn-lg">
                                 <i class="bi bi-arrow-right-circle-fill me-2"></i>进入目标网页
                             </a>
                             <a href="${pageContext.request.contextPath}/advertiserServlet.do?method=viewAd" class="btn btn-secondary btn-lg">
