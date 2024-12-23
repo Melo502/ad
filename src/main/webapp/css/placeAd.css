@@ -1,0 +1,26 @@
+/* 自定义颜色 */
+.badge-active {
+    background-color: #28a745; /* 绿色 */
+    color: white;
+}
+.badge-inactive {
+    background-color: #dc3545; /* 红色 */
+    color: white;
+}
+.badge-primary {
+    background-color: #007bff; /* 蓝色 */
+    color: white;
+}
+.badge-success {
+    background-color: #28a745; /* 绿色 */
+    color: white;
+}
+.badge-warning {
+    background-color: #ffc107; /* 黄色 */
+    color: black;
+}
+.badge-info {
+    background-color: #17a2b8; /* 青色 */
+    color: white;
+}
+/* 可以根据需要添加更多颜色 */
