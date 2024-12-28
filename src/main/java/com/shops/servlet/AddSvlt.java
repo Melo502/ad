@@ -11,13 +11,12 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.HttpSession;
 
 import com.wm.utils.DbConn;
 import com.wm.utils.GetList;
-import com.shops.been.Tb_addrs;
-import com.shops.been.Tb_cars;
-import com.shops.been.Tb_users;
+import com.shops.bean.Tb_addrs;
+import com.shops.bean.Tb_cars;
+import com.shops.bean.Tb_users;
 import com.shops.utils.Dbhelper;
 
 import net.sf.json.JSONObject;

@@ -1,4 +1,4 @@
-package com.shops.been;
+package com.shops.bean;
 
 import java.util.List;
 

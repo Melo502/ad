@@ -1,7 +1,6 @@
 package com.shops.servlet;
 
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -12,9 +11,9 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 
-import com.shops.been.Tb_fgtypes;
-import com.shops.been.Tb_goods;
-import com.shops.been.Tb_sgtypes;
+import com.shops.bean.Tb_fgtypes;
+import com.shops.bean.Tb_goods;
+import com.shops.bean.Tb_sgtypes;
 import com.shops.utils.Dbhelper;
 import com.wm.utils.DbConn;
 import com.wm.utils.GetList;

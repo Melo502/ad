@@ -1,4 +1,4 @@
-package com.shops.been;
+package com.shops.bean;
 
 public class Tb_sgtypes  //商品分类
 {

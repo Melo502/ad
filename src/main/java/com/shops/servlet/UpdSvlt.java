@@ -7,10 +7,9 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.HttpSession;
 
-import com.shops.been.Tb_admins;
-import com.shops.been.Tb_users;
+import com.shops.bean.Tb_admins;
+import com.shops.bean.Tb_users;
 import com.wm.utils.DbConn;
 import com.shops.utils.Dbhelper;
 

@@ -1,15 +1,8 @@
-package com.shops.been;
+package com.shops.bean;
 
-public class Tb_cars
+public class Tb_goods
 {
     private Integer id;
-    private Integer tb_users_id;
-    private Integer tb_goods_id;
-    private Integer cnums;
-    private String uphones;
-    private String upwds;
-    private String unames;
-    private String uaddrs;
     private String gnames;
     private String gpics;
     private Float gvals;
@@ -28,55 +21,6 @@ public class Tb_cars
     }
     public void setId(Integer id){
         this.id=id;
-    }
-
-    public Integer getTb_users_id(){
-        return tb_users_id;
-    }
-    public void setTb_users_id(Integer tb_users_id){
-        this.tb_users_id=tb_users_id;
-    }
-
-    public Integer getTb_goods_id(){
-        return tb_goods_id;
-    }
-    public void setTb_goods_id(Integer tb_goods_id){
-        this.tb_goods_id=tb_goods_id;
-    }
-
-    public Integer getCnums(){
-        return cnums;
-    }
-    public void setCnums(Integer cnums){
-        this.cnums=cnums;
-    }
-
-    public String getUphones(){
-        return uphones;
-    }
-    public void setUphones(String uphones){
-        this.uphones=uphones;
-    }
-
-    public String getUpwds(){
-        return upwds;
-    }
-    public void setUpwds(String upwds){
-        this.upwds=upwds;
-    }
-
-    public String getUnames(){
-        return unames;
-    }
-    public void setUnames(String unames){
-        this.unames=unames;
-    }
-
-    public String getUaddrs(){
-        return uaddrs;
-    }
-    public void setUaddrs(String uaddrs){
-        this.uaddrs=uaddrs;
     }
 
     public String getGnames(){

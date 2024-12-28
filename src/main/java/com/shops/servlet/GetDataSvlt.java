@@ -6,21 +6,20 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.HttpSession;
 import com.wm.utils.DbConn;
 import com.shops.utils.Dbhelper;
 import net.sf.json.JSONObject;
 import java.util.List;
 import com.wm.utils.GetList;
-import com.shops.been.Tb_admins;
-import com.shops.been.Tb_users;
-import com.shops.been.Tb_addrs;
-import com.shops.been.Tb_fgtypes;
-import com.shops.been.Tb_sgtypes;
-import com.shops.been.Tb_goods;
-import com.shops.been.Tb_cars;
-import com.shops.been.Tb_orders;
-import com.shops.been.Tb_details;
+import com.shops.bean.Tb_admins;
+import com.shops.bean.Tb_users;
+import com.shops.bean.Tb_addrs;
+import com.shops.bean.Tb_fgtypes;
+import com.shops.bean.Tb_sgtypes;
+import com.shops.bean.Tb_goods;
+import com.shops.bean.Tb_cars;
+import com.shops.bean.Tb_orders;
+import com.shops.bean.Tb_details;
 
 public class GetDataSvlt extends HttpServlet {
 
