@@ -1,0 +1,162 @@
+/*commodity*/
+.commodity-content .commod-cont-wrap {
+    background: #f8f8f8;
+    padding: 50px 0 90px 0;
+}
+
+.commodity-content .commod-cont .left-nav {
+    width: 200px;
+    line-height: 38px;
+    background: #fff;
+    float: left;
+    margin-right: 58px;
+    border-radius: 8px; /* 增加圆角 */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* 增加阴影效果 */
+}
+
+.commodity-content .commod-cont .left-nav .list-box {
+    border: 1px solid #eeeeee;
+    border-radius: 8px; /* 内部列表圆角 */
+    overflow: hidden; /* 防止内容溢出 */
+}
+
+.commodity-content .commod-cont .left-nav .title {
+    color: #fff;
+    font-size: 16px;
+    background: #333333;
+    text-align: center;
+    font-weight: bold; /* 加粗标题字体 */
+    padding: 10px 0; /* 增加上下内边距 */
+    border-top-left-radius: 8px; /* 标题区域圆角 */
+    border-top-right-radius: 8px;
+}
+
+.commodity-content .commod-cont .left-nav .list-box dt,
+.commodity-content .commod-cont .left-nav .list-box dd {
+    border-bottom: 1px dashed #eeeeee;
+    cursor: pointer;
+    transition: background 0.3s, color 0.3s; /* 增加鼠标悬停的过渡效果 */
+}
+
+.commodity-content .commod-cont .left-nav .list-box dt {
+    font-size: 14px;
+    color: #333;
+    padding-left: 30px;
+    background: url(../img/off-icon.png) 8px -2px no-repeat;
+    cursor: pointer;
+    line-height: 38px;
+}
+
+.commodity-content .commod-cont .left-nav .list-box dt:hover {
+    background-color: #f1f1f1; /* 鼠标悬停背景色 */
+}
+
+.commodity-content .commod-cont .left-nav .list-box dt.active {
+    background-position: 8px -40px;
+    font-weight: bold; /* 激活状态加粗 */
+    color: #ff5500; /* 激活状态颜色 */
+}
+
+.commodity-content .commod-cont .left-nav .list-box dd a {
+    padding-left: 42px;
+    color: #888888;
+    text-decoration: none;
+    font-size: 14px;
+    display: block; /* 链接填充整个区域 */
+    line-height: 38px;
+    transition: color 0.3s, background 0.3s; /* 鼠标悬停过渡 */
+}
+
+.commodity-content .commod-cont .left-nav .list-box dd:hover a {
+    color: #ff5500;
+    background-color: #f9f9f9; /* 增加悬停背景色 */
+    border-radius: 4px; /* 增加小圆角 */
+}
+
+.commodity-content .commod-cont .left-nav .list-box dl:last-child dd:last-child {
+    border-bottom: 0;
+}
+
+.commodity-content .commod-cont .right-cont-wrap {
+    float: left;
+    width: 940px;
+}
+
+.commodity-content .commod-cont .right-cont {
+    width: 1000px;
+}
+
+.commodity-content .commod-cont .right-cont .sort {
+    margin-top: 5px;
+}
+
+.commodity-content .commod-cont .right-cont .sort a {
+    width: 58px;
+    height: 26px;
+    line-height: 26px;
+    font-size: 14px;
+    color: #333333;
+    border: 1px solid #eaeaea;
+    margin-left: -1px;
+    float: left;
+    background: #fff;
+    background: #fff url(../img/sort-arrow.png) no-repeat 41px 0;
+    text-indent: 9px;
+}
+
+.commodity-content .commod-cont .right-cont .sort a.active {
+    background-position: 41px -26px;
+}
+
+.commodity-content .commod-cont .right-cont .prod-number {
+    line-height: 44px;
+    font-size: 16px;
+    padding-left: 7px;
+}
+
+.commodity-content .commod-cont .right-cont .cont-list .item {
+    float: left;
+    width: 280px;
+    height: 366px;
+    border: 1px solid #eaeaea;
+    background: #fff;
+    margin: 0 47px 60px 0;
+    border-radius: 8px; /* 增加商品卡片的圆角 */
+    transition: box-shadow 0.3s; /* 增加悬停效果 */
+}
+
+.commodity-content .commod-cont .right-cont .cont-list .item:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); /* 悬停阴影效果 */
+}
+
+.commodity-content .commod-cont .right-cont .cont-list .item .img {
+    border-bottom: 1px solid #eaeaea;
+    overflow: hidden; /* 确保图片不超出边界 */
+    border-radius: 8px 8px 0 0; /* 图片区域圆角 */
+}
+
+.commodity-content .commod-cont .right-cont .cont-list .item .text {
+    padding: 14px 0 0 14px;
+}
+
+.commodity-content .commod-cont .right-cont .cont-list .title {
+    color: #333333;
+    font-size: 16px;
+    margin-bottom: 14px;
+    font-weight: bold; /* 商品标题加粗 */
+}
+
+.commodity-content .commod-cont .right-cont .cont-list .price {
+    position: relative;
+}
+
+.commodity-content .commod-cont .right-cont .cont-list .pri {
+    color: #ee0000;
+}
+
+.commodity-content .commod-cont .right-cont .cont-list .nub {
+    position: absolute;
+    right: 13px;
+    color: #999999;
+}
+/*end-commodity*/

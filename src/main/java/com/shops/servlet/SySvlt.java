@@ -65,7 +65,7 @@ public class SySvlt extends HttpServlet {
             //新商品
             List<Tb_goods> syxglist=GetList.getlist(Tb_goods.class, db.executeQuery("select tb_goods.id,tb_goods.gnames,tb_goods.gpics,tb_goods.gvals,tb_goods.tb_sgtypes_id,tb_sgtypes.sgtnames,tb_sgtypes.tb_fgtypes_id,tb_fgtypes.fgtname,tb_goods.gmarks,tb_goods.gflags from tb_goods,tb_sgtypes,tb_fgtypes where 1=1  and tb_goods.tb_sgtypes_id=tb_sgtypes.id  and tb_sgtypes.tb_fgtypes_id=tb_fgtypes.id order by tb_goods.id desc limit 0,12 "));
             session.setAttribute("sytjglist", sytjglist);
-            request.setAttribute("alist", syxglist);
+            request.setAttribute("alist", sytjglist);
             request.getRequestDispatcher("/index.jsp").forward(request, response);
             return;
         }
