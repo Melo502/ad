@@ -84,14 +84,61 @@ public class SySvlt extends HttpServlet {
             request.getRequestDispatcher("/index.jsp").forward(request, response);;
             return;
         }
-        if("goods".equals(tbname)){
-            String id=request.getParameter("id");
-            List<Tb_goods> glist=GetList.getlist(Tb_goods.class, db.executeQuery("select tb_goods.id,tb_goods.gnames,tb_goods.gpics,tb_goods.gvals,tb_goods.tb_sgtypes_id,tb_sgtypes.sgtnames,tb_sgtypes.tb_fgtypes_id,tb_fgtypes.fgtname,tb_goods.gmarks,tb_goods.gflags from tb_goods,tb_sgtypes,tb_fgtypes where 1=1  and tb_goods.tb_sgtypes_id=tb_sgtypes.id  and tb_sgtypes.tb_fgtypes_id=tb_fgtypes.id and tb_goods.id="+id));
-            Tb_goods tbg=glist.get(0);
-            request.setAttribute("tbg", tbg);
+        if("goods".equals(tbname)) {
+            String id = request.getParameter("id");
+            List<Tb_goods> glist = GetList.getlist(Tb_goods.class, db.executeQuery(
+                    "select tb_goods.id, tb_goods.gnames, tb_goods.gpics, tb_goods.gvals, tb_goods.tb_sgtypes_id, tb_sgtypes.sgtnames, tb_sgtypes.tb_fgtypes_id, tb_fgtypes.fgtname, tb_goods.gmarks, tb_goods.gflags " +
+                            "from tb_goods, tb_sgtypes, tb_fgtypes " +
+                            "where tb_goods.tb_sgtypes_id = tb_sgtypes.id and tb_sgtypes.tb_fgtypes_id = tb_fgtypes.id and tb_goods.id = " + id
+            ));
+
+            if (!glist.isEmpty()) {
+                Tb_goods tbg = glist.get(0);
+                request.setAttribute("tbg", tbg);
+
+                // 获取主类名和分类名
+                String sgtnames = tbg.getSgtnames(); // 分类名
+                String fgtname = tbg.getFgtname();   // 主类名
+
+                // 处理 Cookies
+                jakarta.servlet.http.Cookie[] cookies = request.getCookies();
+                int clickCount = 1; // 初始点击次数
+                String cookieName = "productClicks_" + id; // 生成唯一 Cookie 名称
+
+                if (cookies != null) {
+                    for (jakarta.servlet.http.Cookie cookie : cookies) {
+                        if (cookieName.equals(cookie.getName())) {
+                            try {
+                                clickCount = Integer.parseInt(cookie.getValue()) + 1;
+                            } catch (NumberFormatException e) {
+                                clickCount = 1; // 如果解析失败，重置为 1
+                            }
+                        }
+                    }
+                }
+
+                // 写入新的 Cookie
+                jakarta.servlet.http.Cookie categoryCookie = new jakarta.servlet.http.Cookie("productCategory", sgtnames);
+                jakarta.servlet.http.Cookie mainTypeCookie = new jakarta.servlet.http.Cookie("productMainType", fgtname);
+                jakarta.servlet.http.Cookie clickCookie = new jakarta.servlet.http.Cookie(cookieName, String.valueOf(clickCount));
+
+                // 设置 Cookie 生命周期（例如 1 天）
+                categoryCookie.setMaxAge(24 * 60 * 60);
+                mainTypeCookie.setMaxAge(24 * 60 * 60);
+                clickCookie.setMaxAge(24 * 60 * 60);
+
+                // 添加到响应中
+                response.addCookie(categoryCookie);
+                response.addCookie(mainTypeCookie);
+                response.addCookie(clickCookie);
+            }
+
             request.getRequestDispatcher("/goods.jsp").forward(request, response);
             return;
         }
+
+
+
     }
 
 
