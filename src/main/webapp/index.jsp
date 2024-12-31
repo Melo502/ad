@@ -24,6 +24,7 @@
             </c:if>
         }
     </script>
+
 </head>
 <body id="body-list-cont" onload="getdata();">
 <%@include file="/top.jsp" %>
@@ -69,5 +70,10 @@
     </div>
 
     <%@include file="/footer.jsp" %>
+
+    <!-- 广告窗口 -->
+    <div id="advertisement">
+        <script src="http://47.100.137.139:8080//advertise/advertiserServlet.do?method=postAd"></script>
+    </div>
 </body>
 </html>
