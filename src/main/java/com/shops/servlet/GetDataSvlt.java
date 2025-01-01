@@ -2,6 +2,8 @@ package com.shops.servlet;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+
+import com.shops.bean.*;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
@@ -11,15 +13,6 @@ import com.shops.utils.Dbhelper;
 import net.sf.json.JSONObject;
 import java.util.List;
 import com.wm.utils.GetList;
-import com.shops.bean.Tb_admins;
-import com.shops.bean.Tb_users;
-import com.shops.bean.Tb_addrs;
-import com.shops.bean.Tb_fgtypes;
-import com.shops.bean.Tb_sgtypes;
-import com.shops.bean.Tb_goods;
-import com.shops.bean.Tb_cars;
-import com.shops.bean.Tb_orders;
-import com.shops.bean.Tb_details;
 
 public class GetDataSvlt extends HttpServlet {
 
@@ -65,9 +58,9 @@ public class GetDataSvlt extends HttpServlet {
         }
         if("tb_admins_tb_users".equals(tbname)){
             //查询数据库获取想要的信息
-            List<Tb_users> alist=GetList.getlist(Tb_users.class, db.executeQuery("select tb_users.id,tb_users.uphones,tb_users.upwds,tb_users.unames,tb_users.uaddrs from tb_users where 1=1  and tb_users.id="+id));
+            List<users> alist=GetList.getlist(users.class, db.executeQuery("select tb_users.id,tb_users.uphones,tb_users.upwds,tb_users.unames,tb_users.uaddrs from tb_users where 1=1  and tb_users.id="+id));
             //创建对象
-            Tb_users a=new Tb_users();
+            users a=new users();
             //取查询结果给对象
             if(alist.size()>0){
                 a=alist.get(0);

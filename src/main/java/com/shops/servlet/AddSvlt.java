@@ -7,6 +7,7 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
+import com.shops.bean.users;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
@@ -16,7 +17,6 @@ import com.wm.utils.DbConn;
 import com.wm.utils.GetList;
 import com.shops.bean.Tb_addrs;
 import com.shops.bean.Tb_cars;
-import com.shops.bean.Tb_users;
 import com.shops.utils.Dbhelper;
 
 import net.sf.json.JSONObject;
@@ -126,7 +126,7 @@ public class AddSvlt extends HttpServlet {
             if(myinfo==null){
                 json.put("msg", "请重新登录");
             }else{
-                Tb_users user=(Tb_users)myinfo;
+                users user=(users)myinfo;
                 //获取前台提交数据
                 String tbaphones=request.getParameter("tbaphones");
                 String tbanames=request.getParameter("tbanames");
@@ -145,7 +145,7 @@ public class AddSvlt extends HttpServlet {
             if(myinfo==null){
                 json.put("msg", "请登录");
             }else{
-                Tb_users user=(Tb_users)myinfo;
+                users user=(users)myinfo;
                 //获取前台提交数据
                 String tb_goods_id=request.getParameter("tb_goods_id");
                 String cnums=request.getParameter("cnums");
@@ -163,7 +163,7 @@ public class AddSvlt extends HttpServlet {
             if(myinfo==null){
                 json.put("msg", "请登录");
             }else{
-                Tb_users user=(Tb_users)myinfo;
+                users user=(users)myinfo;
                 String ids=request.getParameter("ids");
                 String addrid=request.getParameter("addrid");
                 SimpleDateFormat sdf=new SimpleDateFormat("yyyyMMddHHmmss");

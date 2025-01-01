@@ -9,7 +9,7 @@
         <div class="login"><a href="${bpath}reg.jsp">注册</a></div>
       </c:if>
       <c:if test="${utype eq 'tb_users'}">
-        <div class="login"><a href="${bpath}infomation.jsp" style="color: black;">个人中心</a><span></span></div>
+        <div class="login"><a href="${bpath}information.jsp" style="color: black;">个人中心</a><span></span></div>
         <div class="login"><a href="${bpath}LogoutSvlt" style="color: black;">安全退出</a><span></span></div>
       </c:if>
     </div>

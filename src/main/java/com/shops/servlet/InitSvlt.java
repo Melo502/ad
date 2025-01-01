@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import com.shops.bean.*;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
@@ -15,15 +16,6 @@ import com.wm.utils.DbConn;
 import com.wm.utils.HandlePage;
 import com.shops.utils.Dbhelper;
 import com.wm.utils.GetList;
-import com.shops.bean.Tb_admins;
-import com.shops.bean.Tb_users;
-import com.shops.bean.Tb_addrs;
-import com.shops.bean.Tb_fgtypes;
-import com.shops.bean.Tb_sgtypes;
-import com.shops.bean.Tb_goods;
-import com.shops.bean.Tb_cars;
-import com.shops.bean.Tb_orders;
-import com.shops.bean.Tb_details;
 
 
 public class InitSvlt extends HttpServlet {
@@ -75,7 +67,7 @@ public class InitSvlt extends HttpServlet {
                 session.setAttribute("sql", "select tb_users.id,tb_users.uphones,tb_users.upwds,tb_users.unames,tb_users.uaddrs,tb_users.isLogin from tb_users where 1=1 ");
             }
             //查询结果集转化成链表
-            List<Tb_users> alist=GetList.getlist(Tb_users.class, HandlePage.getContent(db, 1, 10, session, "sql", "mysql"));
+            List<users> alist=GetList.getlist(users.class, HandlePage.getContent(db, 1, 10, session, "sql", "mysql"));
             //查询结果传到前台
             request.setAttribute("alist", alist);
             //跳转到前台页面
@@ -165,11 +157,11 @@ public class InitSvlt extends HttpServlet {
             if(myinfo==null){
                 return;
             }
-            Tb_users user=(Tb_users)myinfo;
+            users user=(users)myinfo;
             //查询结果集转化成链表
-            List<Tb_users> alist=GetList.getlist(Tb_users.class,db.executeQuery("select tb_users.id,tb_users.uphones,tb_users.upwds,tb_users.unames,tb_users.uaddrs from tb_users where id="+user.getId()));
+            List<users> alist=GetList.getlist(users.class,db.executeQuery("select tb_users.id,tb_users.uphones,tb_users.upwds,tb_users.unames,tb_users.uaddrs from tb_users where id="+user.getId()));
             //查询结果传到前台
-            Tb_users ad=alist.get(0);
+            users ad=alist.get(0);
             request.setAttribute("tb_users", ad);
             //跳转到前台页面
             request.getRequestDispatcher("/views/tb_users/mtb_users.jsp").forward(request, response);
@@ -181,7 +173,7 @@ public class InitSvlt extends HttpServlet {
             if(myinfo==null){
                 return;
             }
-            Tb_users user=(Tb_users)myinfo;
+            users user=(users)myinfo;
             //如果请求来自左侧菜单，查询全部内容
             if("1".equals(flgs)){
                 session.setAttribute("sql", "select * from tb_addrs where tb_addrs.tb_users_id="+user.getId());
@@ -200,7 +192,7 @@ public class InitSvlt extends HttpServlet {
             if(myinfo==null){
                 return;
             }
-            Tb_users user=(Tb_users)myinfo;
+            users user=(users)myinfo;
             //查询结果集转化成链表
             List<Tb_cars> alist=GetList.getlist(Tb_cars.class, db.executeQuery("select tb_cars.id,tb_cars.tb_users_id,tb_users.uphones,tb_users.upwds,tb_users.unames,tb_users.uaddrs,tb_cars.tb_goods_id,tb_goods.gnames,tb_goods.gpics,tb_goods.gvals,tb_goods.tb_sgtypes_id,tb_sgtypes.sgtnames,tb_sgtypes.tb_fgtypes_id,tb_fgtypes.fgtname,tb_goods.gflags,tb_cars.cnums from tb_cars,tb_users,tb_goods,tb_sgtypes,tb_fgtypes where 1=1  and tb_cars.tb_users_id=tb_users.id  and tb_cars.tb_goods_id=tb_goods.id  and tb_goods.tb_sgtypes_id=tb_sgtypes.id  and tb_sgtypes.tb_fgtypes_id=tb_fgtypes.id and tb_users.id="+user.getId()));
             //查询结果传到前台
@@ -224,7 +216,7 @@ public class InitSvlt extends HttpServlet {
             if(myinfo==null){
                 return;
             }
-            Tb_users user=(Tb_users)myinfo;
+            users user=(users)myinfo;
             //如果请求来自左侧菜单，查询全部内容
             if("1".equals(flgs)){
                 session.setAttribute("sql", "select tb_orders.id,tb_orders.onos,tb_orders.tb_users_id,tb_orders.tbanames,tb_orders.tbaphones,tb_orders.tbaaddrs,tb_orders.otimes,tb_orders.oflags from tb_orders where tb_users_id="+user.getId());

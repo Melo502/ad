@@ -2,6 +2,7 @@ package com.shops.servlet;
 
 import java.io.IOException;
 
+import com.shops.bean.*;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
@@ -19,15 +20,6 @@ import java.util.Iterator;
 import java.util.List;
 
 import com.wm.utils.GetList;
-import com.shops.bean.Tb_admins;
-import com.shops.bean.Tb_users;
-import com.shops.bean.Tb_addrs;
-import com.shops.bean.Tb_fgtypes;
-import com.shops.bean.Tb_sgtypes;
-import com.shops.bean.Tb_goods;
-import com.shops.bean.Tb_cars;
-import com.shops.bean.Tb_orders;
-import com.shops.bean.Tb_details;
 
 
 public class PagingSvlt extends HttpServlet {
@@ -75,7 +67,7 @@ public class PagingSvlt extends HttpServlet {
         //如果是客户信息管理，获取分页数据，跳转到客户信息管理界面
         if("tb_admins_tb_users".equals(tbname)){
             //把查询结果集，转化成对象链表
-            List<Tb_users> alist=GetList.getlist(Tb_users.class, rs);
+            List<users> alist=GetList.getlist(users.class, rs);
             //数据放入到request对象
             request.setAttribute("alist", alist);
             //跳转到前台页面
@@ -153,7 +145,7 @@ public class PagingSvlt extends HttpServlet {
             //数据放入到request对象
             request.setAttribute("alist", alist);
             //获取所属用户id放入到request对象，以便前台页面，使用
-            List<Tb_users> tb_userslist=GetList.getlist(Tb_users.class, db.executeQuery("select * from tb_users"));
+            List<users> tb_userslist=GetList.getlist(users.class, db.executeQuery("select * from tb_users"));
             request.setAttribute("tb_userslist", tb_userslist);
             //跳转到前台页面
             request.getRequestDispatcher("/views/tb_users/mtb_addrs.jsp").forward(request, response);
@@ -166,7 +158,7 @@ public class PagingSvlt extends HttpServlet {
             //数据放入到request对象
             request.setAttribute("alist", alist);
             //获取客户id放入到request对象，以便前台页面，使用
-            List<Tb_users> tb_userslist=GetList.getlist(Tb_users.class, db.executeQuery("select * from tb_users"));
+            List<users> tb_userslist=GetList.getlist(users.class, db.executeQuery("select * from tb_users"));
             request.setAttribute("tb_userslist", tb_userslist);
             //获取商品id放入到request对象，以便前台页面，使用
             List<Tb_goods> tb_goodslist=GetList.getlist(Tb_goods.class, db.executeQuery("select * from tb_goods"));

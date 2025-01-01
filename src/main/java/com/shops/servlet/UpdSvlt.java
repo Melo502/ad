@@ -3,13 +3,13 @@ package com.shops.servlet;
 import java.io.IOException;
 import java.io.PrintWriter;
 
+import com.shops.bean.users;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 import com.shops.bean.Tb_admins;
-import com.shops.bean.Tb_users;
 import com.wm.utils.DbConn;
 import com.shops.utils.Dbhelper;
 
@@ -117,7 +117,7 @@ public class UpdSvlt extends HttpServlet {
             if(myinfo==null){
                 json.put("msg", "请重新登录");
             }else{
-                Tb_users user=(Tb_users)myinfo;
+                users user=(users)myinfo;
                 //获取前台提交数据
                 String upwds=request.getParameter("upwds");
                 String uphones=request.getParameter("uphones");
@@ -226,7 +226,7 @@ public class UpdSvlt extends HttpServlet {
                     }
                 }
                 if("tb_users".equals(utype.toString())){
-                    Tb_users ad=(Tb_users)myinfo;
+                    users ad=(users)myinfo;
                     if(db.checkTrue("select id from tb_users where upwds='"+opwd+"' and id="+ad.getId())){
                         json.put("msg", "旧密码输入有误");
                     }else{
